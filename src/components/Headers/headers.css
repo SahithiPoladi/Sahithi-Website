@@ -1,3 +1,30 @@
+/* Prevent Ant Design Menu from collapsing/overflowing items */
+.transparent-menu .ant-menu-overflow {
+  flex-wrap: nowrap !important;
+  overflow: visible !important;
+}
+.transparent-menu .ant-menu-item {
+  white-space: nowrap !important;
+}
+/* Keep menu item text black and add black underline on hover/active/selected */
+.transparent-menu .ant-menu-item {
+  color: #111 !important;
+  font-weight: 500;
+  background: transparent !important;
+  transition: border-bottom 0.2s;
+}
+
+.transparent-menu .ant-menu-item:hover,
+.transparent-menu .ant-menu-item-active,
+.transparent-menu .ant-menu-item-selected {
+  color: #111 !important;
+  border-bottom: 2.5px solid #111 !important;
+  background: transparent !important;
+}
+
+.transparent-menu .ant-menu-item:after {
+  display: none !important;
+}
 .app-background {
   background: linear-gradient(-45deg, #603C14, #9C2706, #D45B12, #F3BC2E, #5F5426);
 }

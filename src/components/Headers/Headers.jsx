@@ -4,13 +4,12 @@ import './headers.css'
 import Work from '../Work/Work';
 import About from '../About/About';
 import Contact from '../Contact/Contact';
-import Home from '../Home/Home';
 import spLogo from '../../common/images/sp.png';
 
 const { Header, Content } = Layout;
 
 const Headers = () => {
-  const [selectedKey, setSelectedKey] = useState('home');
+  const [selectedKey, setSelectedKey] = useState('work');
 
   const items = [
     {
@@ -41,18 +40,18 @@ const Headers = () => {
       <Header className='headers-background' style={{ display: 'flex', alignItems: 'center' }}>
         <Button
           type="text"
-          onClick={() => setSelectedKey('home')}
-          style={{ marginRight: 16, display: 'flex', alignItems: 'center', gap: 8 }}
+          onClick={() => setSelectedKey('work')}
+          style={{ marginRight: 16, display: 'flex', alignItems: 'center', gap: 8, fontWeight: 'bold', fontSize: 18 }}
         >
           <img src={spLogo} alt="logo" style={{ height: 45, width: 45, objectFit: 'contain' }} />
-          Sahihthi Poladi
+          SAHITHI POLADI
         </Button>
         <div style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
           <Menu
             mode="horizontal"
             className='transparent-menu'
             onClick={onItemSelect}
-            selectedKeys={selectedKey && selectedKey !== 'home' ? [selectedKey] : []}
+            selectedKeys={selectedKey && [selectedKey]}
             style={{ minWidth: 0 }}
           >
             {items.map(item => (
@@ -64,7 +63,7 @@ const Headers = () => {
         </div>
       </Header>
       <Content className="full-screen-image-content" >
-        {selectedKey === 'home' ? <Home /> : selectedComponent}
+        {selectedComponent}
       </Content>
     </Layout>
   );
