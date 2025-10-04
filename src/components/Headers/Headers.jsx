@@ -9,7 +9,7 @@ import spLogo from '../../common/images/sp.png';
 const { Header, Content } = Layout;
 
 const Headers = () => {
-  const [selectedKey, setSelectedKey] = useState('work');
+  const [selectedKey, setSelectedKey] = useState('about');
 
   const items = [
     {
@@ -40,7 +40,7 @@ const Headers = () => {
       <Header className='headers-background' style={{ display: 'flex', alignItems: 'center' }}>
         <Button
           type="text"
-          onClick={() => setSelectedKey('work')}
+          onClick={() => setSelectedKey('about')}
           style={{ marginRight: 16, display: 'flex', alignItems: 'center', gap: 8, fontWeight: 'bold', fontSize: 18 }}
         >
           <img src={spLogo} alt="logo" style={{ height: 45, width: 45, objectFit: 'contain' }} />
