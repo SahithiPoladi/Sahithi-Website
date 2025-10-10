@@ -7,10 +7,12 @@ import About from './components/About';
 import Work from './components/Work';
 import Skills from './components/Skills';
 import Contacts from './components/Contacts';
+import StarsBackground from './common/StarsBackground';
 
 function App() {
   return (
     <div className="App">
+      <StarsBackground />
       <BrowserRouter>
         <NavBar />
 

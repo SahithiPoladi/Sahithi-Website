@@ -1,6 +1,7 @@
 import React from "react";
 import { Card, Form, Input, Button, message, Row, Col, Flex } from "antd";
 import { contact } from "../utils";
+import "./index.css";
 
 const { TextArea } = Input;
 
@@ -30,7 +31,7 @@ const Contacts = () => {
       <h1
         className="kaushan-script-regular"
         style={{
-          fontSize: "50px",
+          fontSize: "56px",
           textAlign: "center",
           marginBottom: "50px",
         }}
@@ -48,10 +49,12 @@ const Contacts = () => {
           <Card
             title="Send an Email"
             bordered={false}
+            headStyle={{ color: "#d9dddc", background: "transparent" }}
             style={{
               boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
-              padding: "20px",
-              fontSize: "25px",
+              padding: "24px",
+              fontSize: "34px",
+              color: "#d9dddc",
             }}
             className="unna-regular card-border-gradient"
           >
@@ -63,29 +66,29 @@ const Contacts = () => {
               className="unna-regular"
             >
               <Form.Item
-                label="Name"
+                label={<span className="form-label">Name</span>}
                 name="name"
                 rules={[{ required: true, message: "Please enter your name" }]}
               >
-                <Input placeholder="Enter your name" />
+                <Input className="form-input" placeholder="Enter your name" />
               </Form.Item>
 
               <Form.Item
-                label="Subject"
+                label={<span className="form-label">Subject</span>}
                 name="subject"
                 rules={[{ required: true, message: "Please enter a subject" }]}
               >
-                <Input placeholder="Enter subject" />
+                <Input className="form-input" placeholder="Enter subject" />
               </Form.Item>
 
               <Form.Item
-                label="Message"
+                label={<span className="form-label">Message</span>}
                 name="message"
                 rules={[
                   { required: true, message: "Please enter your message" },
                 ]}
               >
-                <TextArea rows={4} placeholder="Enter your message" />
+                <TextArea rows={4} className="form-input" placeholder="Enter your message" />
               </Form.Item>
 
               <Form.Item>
@@ -96,10 +99,10 @@ const Contacts = () => {
                     gap: "10px",
                   }}
                 >
-                  <Button htmlType="button" onClick={onReset}>
+                  <Button htmlType="button" onClick={onReset} className="form-buttons">
                     Reset
                   </Button>
-                  <Button type="primary" htmlType="submit">
+                  <Button type="primary" htmlType="submit" className="form-buttons">
                     Send
                   </Button>
                 </div>

@@ -23,6 +23,9 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: #d9dddc;
+  position: relative;
+  z-index: 2;
+  /* sit above the stars overlay which uses z-index:0 */
 }
 
 .App-link {
@@ -33,6 +36,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }

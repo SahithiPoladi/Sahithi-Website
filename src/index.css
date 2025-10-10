@@ -54,14 +54,25 @@ p {
 html,
 body,
 #root {
+  /* main gradient background for the app */
   background: linear-gradient(-45deg,
       #073b41,
       #2a655e,
       #235c4b,
       #040b14,
       #445454);
+  /* solid fallback color used during overscroll/bounce on some browsers (iOS/Chrome) */
+  background-color: #040b14;
+  /* keep the background visually consistent during scroll and overscroll */
+  background-attachment: fixed;
   color: #d9dddc;
   min-height: 100%;
+  height: 100%;
+  /* prevent scroll chaining / rubber-band showing the underlying white page */
+  overscroll-behavior: contain;
+  overscroll-behavior-y: contain;
+  /* enable smooth native scrolling on iOS where supported */
+  -webkit-overflow-scrolling: touch;
 }
 
 .ant-layout,
