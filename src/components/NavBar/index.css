@@ -1,0 +1,41 @@
+/* Remove underline and focus ring from menu items, and make hovered/selected items bold */
+.ant-menu-item,
+.ant-menu-item a,
+.ant-menu-item:hover,
+.ant-menu-item:focus,
+.ant-menu-item:active,
+.ant-menu-item-selected {
+  text-decoration: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Remove any decorative underline pseudo-elements for horizontal menu */
+.ant-menu-horizontal .ant-menu-item::after,
+.ant-menu-item::after,
+.ant-menu-item-selected::after {
+  display: none !important;
+}
+
+/* Bold on hover/focus and when selected */
+.ant-menu-item:hover,
+.ant-menu-item:focus,
+.ant-menu-item-selected {
+  font-weight: 700;
+}
+
+/* Ensure selected state doesn't show default text-decoration from browser */
+.ant-menu-item-selected,
+.ant-menu-item-selected a {
+  text-decoration: none !important;
+}
+
+.headers {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background-color: transparent;
+  border-bottom: 1px solid transparent;
+}
