@@ -61,37 +61,37 @@ const NavBar = () => {
   useEffect(() => {
     const sectionIds = items.map(i => i.key);
 
-    const onScroll = () => {
-      if (tickingRef.current) return;
-      tickingRef.current = true;
-      window.requestAnimationFrame(() => {
-        let closest = null;
-        let closestDistance = Infinity;
-
-        sectionIds.forEach(id => {
-          const el = document.getElementById(id);
-          if (!el) return;
-          const rect = el.getBoundingClientRect();
-          // distance from top of viewport to the element top, adjusted by header
-          const distance = Math.abs(rect.top - HEADER_HEIGHT);
-          // prefer elements that are not far below the viewport
-          if (rect.top - HEADER_HEIGHT <= window.innerHeight && distance < closestDistance) {
-            closestDistance = distance;
-            closest = id;
-          }
-        });
-
-        if (closest) {
-          setSelectedKey(prev => (prev === closest ? prev : closest));
-        }
-        tickingRef.current = false;
-      });
+    // Use IntersectionObserver to observe which section is visible. This is
+    // cheaper than calling getBoundingClientRect on every scroll frame.
+    const observerOptions = {
+      root: null,
+      rootMargin: `-${HEADER_HEIGHT}px 0px 0px 0px`,
+      threshold: [0.1, 0.5, 0.9],
     };
 
-    window.addEventListener('scroll', onScroll, { passive: true });
-    // run once on mount to set initial menu state
-    onScroll();
-    return () => window.removeEventListener('scroll', onScroll);
+    const observer = new IntersectionObserver((entries) => {
+      // Pick the entry with the largest intersectionRatio that's intersecting
+      const visible = entries
+        .filter(e => e.isIntersecting)
+        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+
+      if (visible) {
+        const id = visible.target.id;
+        setSelectedKey(prev => (prev === id ? prev : id));
+      }
+    }, observerOptions);
+
+    sectionIds.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    // run once on mount to set initial menu state based on current viewport
+    // find the first observed element that intersects
+    // cleanup
+    return () => {
+      observer.disconnect();
+    };
   }, []);
 
   return (
