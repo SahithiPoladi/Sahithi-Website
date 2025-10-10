@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Layout, Menu, Button, Row, Col } from 'antd';
 import spLogo from '../../common/images/sp.png';
+import { DownloadOutlined } from '@ant-design/icons';
 import './index.css';
+const resumePath = '/Sahithi_Poladi.pdf';
 
 const { Header } = Layout;
 
@@ -26,7 +28,7 @@ const NavBar = () => {
     }
   };
 
- const items = [
+  const items = [
     {
       key: 'home',
       value: 'Home',
@@ -94,16 +96,16 @@ const NavBar = () => {
 
   return (
     <>
-      <Header 
-      className='headers card-border-gradient' 
-      style={{borderImage: 'linear-gradient(90deg, #1c1026, #c6bbb9, #4c1e3c, #21242b, #7a748c) 1',}}
+      <Header
+        className='headers card-border-gradient'
+        style={{ borderImage: 'linear-gradient(90deg, #1c1026, #c6bbb9, #4c1e3c, #21242b, #7a748c) 1', }}
       >
         <Row justify="space-between" align="middle" style={{ height: '100%' }}>
           <Col>
             <Button
               type="text"
               onClick={() => { setSelectedKey('home'); scrollToId('home'); }}
-              style={{ display: 'flex', alignItems: 'center', gap: 8, fontWeight: 'bold', fontSize: 18, color: '#d9dddc'}}
+              style={{ display: 'flex', alignItems: 'center', gap: 8, fontWeight: 'bold', fontSize: 18, color: '#d9dddc' }}
             >
               <img src={spLogo} alt="logo" style={{ height: 45, width: 45, objectFit: 'contain' }} />
             </Button>
@@ -113,12 +115,12 @@ const NavBar = () => {
               mode="horizontal"
               onClick={onItemSelect}
               selectedKeys={selectedKey && [selectedKey]}
-              style={{ 
-                flexGrow: 1, 
-                borderBottom: 'none', 
-                display: 'flex', 
+              style={{
+                flexGrow: 1,
+                borderBottom: 'none',
+                display: 'flex',
                 justifyContent: 'center',
-              }} 
+              }}
             >
               {items.map(item => (
                 <Menu.Item key={item.key}>
@@ -126,6 +128,16 @@ const NavBar = () => {
                 </Menu.Item>
               ))}
             </Menu>
+          </Col>
+          <Col>
+            <Button
+              className='resume-button unna-bold'
+              icon={<DownloadOutlined />}
+              href={resumePath}
+              download
+            >
+              Resume
+            </Button>
           </Col>
         </Row>
       </Header>
