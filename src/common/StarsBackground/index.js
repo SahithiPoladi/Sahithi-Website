@@ -23,16 +23,26 @@ const StarsBackground = () => {
     const delay = Math.random() * 6; // s
     const duration = 1.5 + Math.random() * 4; // s
     const color = PALETTE[Math.floor(Math.random() * PALETTE.length)];
-    const glow = hexToRgba(color, 0.98);
+    const glow = hexToRgba(color, 0.9);
 
+    // Use CSS variables to control per-star visuals (size, glow, halo)
     const style = {
       left: `${left}vw`,
       top: `${top}vh`,
+      // base element is a small bright core; spikes are created in CSS pseudo-elements
       width: `${size}px`,
       height: `${size}px`,
       animationDelay: `${delay}s`,
       animationDuration: `${duration}s`,
-      backgroundColor: color,
+      backgroundColor: '#ffffff',
+      // expose variables for the CSS to consume
+      '--star-size': `${size}px`,
+      '--glow-color': glow,
+      // Larger glow radius for a softer halo (improves 'beautiful' look)
+      '--glow-radius': `${Math.max(14, size * 10)}px`,
+      // control halo alpha separately
+      '--halo-alpha': `${Math.max(0.08, Math.min(0.4, 0.05 + size * 0.06))}`,
+      // keep a small soft glow from the inline box-shadow as fallback
       boxShadow: `0 0 ${Math.max(6, size * 6)}px ${Math.max(2, size + 1)}px ${glow}`,
       opacity: 1,
     };
