@@ -3,7 +3,7 @@ import "./index.css";
 
 const StarsBackground = () => {
   // Palette requested by the user
-  const PALETTE = ["#1c1026", "#c6bbb9", "#4c1e3c", "#21242b", "#7a748c"];
+  const PALETTE = ["#B1D4EF", "#BEDBF0", "#C7EBF2", "#D7EDEB", "#EBF8F5"];
   const STAR_COUNT = 180;
 
   // helper to convert hex to rgba string with alpha

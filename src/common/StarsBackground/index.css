@@ -23,13 +23,13 @@
     background: transparent;
     box-shadow:
         10vw 20vh #fff,
-        30vw 10vh #c6bbb9,
-        60vw 70vh #7a748c,
-        80vw 40vh #4c1e3c,
-        50vw 80vh #c6bbb9,
+        30vw 10vh #B1D4EF,
+        60vw 70vh #BEDBF0,
+        80vw 40vh #C7EBF2,
+        50vw 80vh #D7EDEB,
         20vw 60vh #fff,
-        90vw 30vh #7a748c,
-        40vw 90vh #c6bbb9;
+        90vw 30vh #EBF8F5,
+        40vw 90vh #C7EBF2;
     border-radius: 50%;
     animation: twinkle 4s infinite ease-in-out alternate;
     opacity: 0.8;
