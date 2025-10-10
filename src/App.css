@@ -14,14 +14,18 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  /* let root background show through */
+  background-color: transparent;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
+  color: #d9dddc;
+  position: relative;
+  z-index: 2;
+  /* sit above the stars overlay which uses z-index:0 */
 }
 
 .App-link {
@@ -32,6 +36,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
