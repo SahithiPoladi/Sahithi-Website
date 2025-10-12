@@ -75,8 +75,34 @@ async function getContactInfo(query = {}) {
     }
 }
 
+/**
+ * Fetch About me info from the configured collection.
+ * @param {Object} query - MongoDB find query
+ * @returns {Promise<Array>} array of about me documents
+ */
+async function getAboutMe(query = {}) {
+    try {
+        console.log(`Entering getAboutMe service function`);
+        const db = getDb();
+        const aboutMe = await db.collection(dbCollections.aboutMeCollection).find(query).toArray();
+        if (!aboutMe) {
+            throw new Error('No about me info found');
+        } else {
+            return {
+                count: aboutMe.length,
+                aboutMe: aboutMe,
+                message: 'About me info fetched successfully'
+            }
+        }
+    } catch (err) {
+        console.error('Error in getAboutMe service:', err);
+        throw err;
+    }
+}
+
 module.exports = {
     getSkillSets,
     getExperiences,
     getContactInfo,
+    getAboutMe,
 };

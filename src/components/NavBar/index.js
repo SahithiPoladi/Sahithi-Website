@@ -29,26 +29,11 @@ const NavBar = () => {
   };
 
   const items = [
-    {
-      key: 'home',
-      value: 'Home',
-    },
-    {
-      key: 'about',
-      value: 'About',
-    },
-    {
-      key: 'work',
-      value: 'Work',
-    },
-    {
-      key: 'skills',
-      value: 'Skills',
-    },
-    {
-      key: 'contact',
-      value: 'Contact',
-    }
+    { key: 'home', label: 'Home' },
+    { key: 'about', label: 'About' },
+    { key: 'work', label: 'Work' },
+    { key: 'skills', label: 'Skills' },
+    { key: 'contact', label: 'Contact' },
   ];
 
   const onItemSelect = (e) => {
@@ -114,20 +99,15 @@ const NavBar = () => {
             <Menu
               mode="horizontal"
               onClick={onItemSelect}
-              selectedKeys={selectedKey && [selectedKey]}
+              selectedKeys={selectedKey ? [selectedKey] : []}
+              items={items}
               style={{
                 flexGrow: 1,
                 borderBottom: 'none',
                 display: 'flex',
                 justifyContent: 'center',
               }}
-            >
-              {items.map(item => (
-                <Menu.Item key={item.key}>
-                  {item.value}
-                </Menu.Item>
-              ))}
-            </Menu>
+            />
           </Col>
           <Col>
             <Button

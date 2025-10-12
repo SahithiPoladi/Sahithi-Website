@@ -48,8 +48,10 @@ const Contacts = () => {
         <Col xs={24} sm={24} md={12} lg={10}>
           <Card
             title="Send an Email"
-            bordered={false}
-            headStyle={{ color: "#d9dddc", background: "transparent" }}
+            variant="plain"
+            styles={{
+              header: { color: "#d9dddc", background: "transparent" },
+            }}
             style={{
               boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
               padding: "24px",

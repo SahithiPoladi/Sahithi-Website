@@ -1,6 +1,9 @@
 import React, { useMemo } from "react";
 import { skills } from '../utils';
 import { Tag } from 'antd';
+import { fetchSkillsQuery } from '../../apiService';
+import { useQuery } from '@tanstack/react-query';
+
 
 const SkillTag = React.memo(({ skill }) => (
     <Tag
@@ -23,21 +26,46 @@ const SkillTag = React.memo(({ skill }) => (
 ));
 
 const Skills = () => {
-    const tags = useMemo(() => skills.map((skill, index) => <SkillTag key={index} skill={skill} />), []);
+    const {
+        data: skillsResponse,
+        isLoading: skillsLoading
+    } = useQuery({ queryKey: ['skills'], queryFn: fetchSkillsQuery });
+
+    const skillsArray = useMemo(() => {
+        if (!skillsResponse) return [];
+        if (Array.isArray(skillsResponse)) return skillsResponse;
+        if (Array.isArray(skillsResponse.skills) && skillsResponse.skills.length > 0) {
+            const first = skillsResponse.skills[0];
+            if (first && Array.isArray(first.skills)) return first.skills;
+        }
+        if (Array.isArray(skillsResponse.skills) && skillsResponse.skills.every(s => typeof s === 'string')) {
+            return skillsResponse.skills;
+        }
+        return [];
+    }, [skillsResponse]);
+
+    const tags = useMemo(() => skillsArray.map((skill, index) => <SkillTag key={index} skill={skill} />) || [], [skillsArray]);
 
     return (
         <div style={{ maxWidth: '1200px', margin: '0 auto' }} id="skills">
             <h1 className="kaushan-script-regular" style={{ fontSize: '50px', textAlign: 'center' }}>My Skill Set</h1>
-            <div
-                style={{
-                    display: "grid",
-                    gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-                    gap: "16px",
-                    justifyItems: "center",
-                }}
-            >
-                {tags}
-            </div>
+            {
+                skillsLoading ?
+                    <p style={{ textAlign: 'center', color: '#d9dddc' }}>Loading skills...</p> :
+                    skillsResponse?.length === 0 ?
+                        <p style={{ textAlign: 'center', color: '#d9dddc' }}>No skills found.</p> :
+                        <div
+                            style={{
+                                display: "grid",
+                                gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+                                gap: "16px",
+                                justifyItems: "center",
+                            }}
+                        >
+                            {tags}
+                        </div>
+            }
+
         </div>
     );
 };
