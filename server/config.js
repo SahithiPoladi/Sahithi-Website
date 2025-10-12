@@ -33,6 +33,7 @@ const dbCollections = {
     skillSetCollection: process.env.SKILLS_COLLECTION || 'skillSet',
     experienceCollection: process.env.EXPERIENCE_COLLECTION || 'experience',
     contactCollection: process.env.CONTACT_COLLECTION || 'contactMe',
+    aboutMeCollection: process.env.ABOUT_ME_COLLECTION || 'aboutMe',
 };
 
 module.exports = {

@@ -1,5 +1,6 @@
 const express = require('express');
 const morgan = require('morgan');
+const cors = require('cors');
 const { connectToDb, getDb } = require('./config');
 const dotenv = require('dotenv');
 
@@ -8,11 +9,16 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 5000;
 
+// Allow configuring the client origin via env (defaults to allowing localhost:3000 during dev)
+const clientOrigin = process.env.CLIENT_ORIGIN || 'http://localhost:3000';
+
 let db;
 
 connectToDb((err) => {
     if (!err) {
         // middleware
+        // enable CORS for requests from the client origin
+        app.use(cors({ origin: clientOrigin }));
         app.use(express.json());
         // request logging
         app.use(morgan('dev'));

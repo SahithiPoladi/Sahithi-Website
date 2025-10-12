@@ -39,8 +39,22 @@ async function getContactInfo(req, res) {
     }
 }
 
+async function getAboutMe(req, res) {
+    try {
+        console.log(`Entering getAboutMe controller`);
+        const query = { ...req.query };
+        const result = await services.getAboutMe(query);
+        console.log(`Successfully returned About Me data`);
+        res.json(result);
+    } catch (err) {
+        console.error('Error in getAboutMe controller:', err);
+        res.status(500).json({ error: err.message });
+    }
+}
+
 module.exports = {
     getSkillSet,
     getExperience,
     getContactInfo,
+    getAboutMe,
 };
