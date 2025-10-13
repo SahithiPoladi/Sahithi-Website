@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useEffect, useRef } from "react";
 import "./index.css";
 
 const StarsBackground = () => {
@@ -61,7 +61,43 @@ const StarsBackground = () => {
     });
   }, []);
 
-  return <div className="stars-overlay" aria-hidden="true">{stars}</div>;
+  // Pause star animations while the user is actively scrolling quickly to
+  // reduce expensive repaints/paints that can cause blank frames. We
+  // respect prefers-reduced-motion and do nothing if the user requests
+  // reduced motion.
+  const overlayRef = useRef(null);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    let timeout = null;
+    const onScroll = () => {
+      const el = overlayRef.current;
+      if (!el) return;
+      // add class that will pause CSS animations
+      el.classList.add('is-scrolling');
+      if (timeout) clearTimeout(timeout);
+      // resume animations shortly after scrolling stops
+      timeout = setTimeout(() => {
+        el.classList.remove('is-scrolling');
+        timeout = null;
+      }, 150);
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      if (timeout) clearTimeout(timeout);
+    };
+  }, []);
+
+  return (
+    <div ref={overlayRef} className="stars-overlay" aria-hidden="true">
+      {stars}
+    </div>
+  );
 };
 
 export default React.memo(StarsBackground);

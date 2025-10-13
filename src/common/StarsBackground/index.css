@@ -155,6 +155,23 @@
     }
 }
 
+/* While the user is actively scrolling quickly, pause animations and
+   reduce filters/shadows to avoid heavy repaints. The JS adds
+   `.is-scrolling` to the overlay during scroll bursts. */
+.stars-overlay.is-scrolling,
+.stars-overlay.is-scrolling::before,
+.stars-overlay.is-scrolling::after,
+.stars-overlay.is-scrolling .star,
+.stars-overlay.is-scrolling .star::after {
+    /* stop CSS animations */
+    animation-play-state: paused !important;
+    transition: none !important;
+    /* avoid filters and expensive painting during scroll */
+    filter: none !important;
+    box-shadow: none !important;
+    will-change: auto !important;
+}
+
 /* Ensure the overlay remains behind main content; the app content can use z-index > 0 */
 .stars-overlay {
     z-index: 0;
