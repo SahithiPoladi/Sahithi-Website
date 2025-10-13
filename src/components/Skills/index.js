@@ -49,9 +49,6 @@ const Skills = () => {
 
             {!isLoading && !isError && (
                 <>
-                    <div style={{ textAlign: 'center', marginBottom: 12 }} className="unna-regular">
-                        Showing {skillsArray.length} skills
-                    </div>
                     <div
                         style={{
                             display: "grid",
