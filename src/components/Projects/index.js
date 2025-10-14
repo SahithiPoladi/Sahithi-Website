@@ -62,8 +62,6 @@ const Projects = () => {
                             margin: '0 auto',
                             display: 'grid',
                             gap: 32,
-                            // Aim for exactly two cards per row on sufficiently wide screens.
-                            // minmax lets it collapse to single column on narrow viewports.
                             gridTemplateColumns: 'repeat(auto-fill, minmax(460px, 1fr))'
                         }}
                     >

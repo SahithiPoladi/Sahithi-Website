@@ -64,6 +64,10 @@ const NavBar = () => {
     setSelectedKey(key);
     if (key === 'projects') {
       navigate('/projects');
+      // After route change, ensure view resets to top (smooth for consistency)
+      setTimeout(() => {
+        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+      }, 0);
     } else {
       if (location.pathname !== '/') {
         navigate('/');
