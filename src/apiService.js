@@ -46,3 +46,17 @@ export const fetchAboutQuery = async () => {
         throw error;
     }
 };
+
+export const sendContact = async (payload) => {
+    try {
+        const url = `${apiBaseUrl.replace(/\/$/, '')}/contact`;
+        const response = await axios.post(url, payload, {
+            headers: { 'Content-Type': 'application/json' },
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error sending contact:', error);
+        // rethrow to let caller handle notifications
+        throw error;
+    }
+};

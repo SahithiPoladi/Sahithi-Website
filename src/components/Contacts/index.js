@@ -3,7 +3,7 @@ import { Card, Form, Input, Button, message, Row, Col, Space } from "antd";
 import "./index.css";
 import { LinkedinOutlined, GithubOutlined, InstagramOutlined } from '@ant-design/icons';
 import { useQuery } from '@tanstack/react-query';
-import { fetchContactQuery } from '../../apiService';
+import { fetchContactQuery, sendContact } from '../../apiService';
 
 const { TextArea } = Input;
 
@@ -11,7 +11,7 @@ const Contacts = () => {
   const [form] = Form.useForm();
 
   const {
-    data: contactResponse, isLoading, isError
+    data: contactResponse, isLoading, isError, error
   } = useQuery({ queryKey: ['contact'], queryFn: fetchContactQuery });
 
   const [submitting, setSubmitting] = useState(false);
@@ -20,24 +20,15 @@ const Contacts = () => {
   const onFinish = async (values) => {
     try {
       setSubmitting(true);
-      // POST to server endpoint
-      const res = await fetch('/api/v1/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(values),
-      });
-
-      const data = await res.json();
-      if (!res.ok) {
-        console.error('Server error:', data);
-        message.error(data.error || 'Failed to send email');
-      } else {
-        message.success(data.message || 'Email sent successfully!');
-        form.resetFields();
-      }
+      // POST to server using centralized apiService
+      const data = await sendContact(values);
+      message.success(data.message || 'Email sent successfully!');
+      form.resetFields();
     } catch (err) {
       console.error('Network error:', err);
-      message.error('Failed to send email');
+      // axios errors may contain response.data
+      const errMsg = err?.response?.data?.error || err.message || 'Failed to send email';
+      message.error(errMsg);
     } finally {
       setSubmitting(false);
     }
@@ -157,12 +148,11 @@ const Contacts = () => {
 
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             {isLoading ? (
-              <div style={{ padding: 24, textAlign: 'center' }}>Loading contact info…</div>
+              <div>Loading contact info…</div>
             ) : isError ? (
-              <div style={{ padding: 24, textAlign: 'center', color: 'var(--danger, #ff6b6b)' }}>Failed to load Contact info: {error?.message}</div>
+              <div>Failed to load Contact information</div>
             ) : (
               (() => {
-                // map server icon names to actual components
                 const iconsMap = {
                   LinkedinOutlined: LinkedinOutlined,
                   GithubOutlined: GithubOutlined,

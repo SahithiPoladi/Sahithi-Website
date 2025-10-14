@@ -27,9 +27,24 @@ connectToDb((err) => {
         const routers = require('./routes');
         app.use('/api/v1', routers);
 
-        const server = app.listen(port, () => {
+        const server = app.listen(port, async () => {
             console.log(`Server running on port ${port}`);
             db = getDb();
+
+            // start optional background scheduler for sending emails
+            try {
+                const scheduler = require('./emailScheduler');
+                if (scheduler && scheduler.isEnabled && scheduler.isEnabled()) {
+                    // start with defaults (can be overridden via env vars)
+                    scheduler.start().catch((err) => {
+                        console.error('Failed to start email scheduler:', err && err.message);
+                    });
+                } else {
+                    console.log('Email scheduler not enabled (set SCHEDULER_ENABLED=true to enable)');
+                }
+            } catch (err) {
+                console.error('Error while initializing email scheduler:', err && err.message);
+            }
         });
 
         server.on('error', (err) => {

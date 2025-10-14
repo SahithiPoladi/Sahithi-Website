@@ -76,30 +76,30 @@ const Work = () => {
     return (
         <>
             <h1 className="kaushan-script-regular" style={{ fontSize: '50px', textAlign: 'center' }}>Professional Work Experience</h1>
-            <div style={{ position: "relative", maxWidth: '1200px', margin: '0 auto' }}>
-                <div
-                    style={{
-                        position: "absolute",
-                        left: "50%",
-                        top: 0,
-                        bottom: 0,
-                        width: "4px",
-                        background: "linear-gradient(180deg, #1c1026, #c6bbb9, #4c1e3c, #21242b, #7a748c)",
-                        transform: "translateX(-50%)",
-                        zIndex: 0
-                    }}
-                />
+            {isLoading ? (
+                <div>Loading experiences…</div>
+            ) : isError ? (
+                <div>Failed to load experiences information</div>
+            ) : (
+                <div style={{ position: "relative", maxWidth: '1200px', margin: '0 auto' }}>
+                    <div
+                        style={{
+                            position: "absolute",
+                            left: "50%",
+                            top: 0,
+                            bottom: 0,
+                            width: "4px",
+                            background: "linear-gradient(180deg, #1c1026, #c6bbb9, #4c1e3c, #21242b, #7a748c)",
+                            transform: "translateX(-50%)",
+                            zIndex: 0
+                        }}
+                    />
 
-                {isLoading ? (
-                    <div style={{ padding: 24, textAlign: 'center' }}>Loading experiences…</div>
-                ) : isError ? (
-                    <div style={{ padding: 24, textAlign: 'center', color: 'var(--danger, #ff6b6b)' }}>Failed to load experiences: {error?.message}</div>
-                ) : (
-                    experiences.map((exp) => (
+                    {experiences.map((exp) => (
                         <WorkItem key={exp._id} exp={exp} />
-                    ))
-                )}
-            </div>
+                    ))}
+                </div>
+            )}
         </>
     );
 };
