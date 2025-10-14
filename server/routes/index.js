@@ -5,5 +5,7 @@ const controller = require('../controllers');
 router.get('/skills', controller.getSkillSet);
 router.get('/experience', controller.getExperience);
 router.get('/contact', controller.getContactInfo);
+router.post('/contact', controller.sendContact);
+router.get('/about', controller.getAboutMe);
 
 module.exports = router;

@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
-import { skills } from '../utils';
 import { Tag } from 'antd';
+import { useQuery } from '@tanstack/react-query';
+import { fetchSkillsQuery } from '../../apiService';
 
 const SkillTag = React.memo(({ skill }) => (
     <Tag
@@ -23,12 +24,24 @@ const SkillTag = React.memo(({ skill }) => (
 ));
 
 const Skills = () => {
-    const tags = useMemo(() => skills.map((skill, index) => <SkillTag key={index} skill={skill} />), []);
+    const { data: skillsResponse, isLoading, isError } = useQuery({ queryKey: ['skills'], queryFn: fetchSkillsQuery });
+
+    const skillsArray = useMemo(() => {
+        if (!skillsResponse) return [];
+        return skillsResponse.skills?.[0]?.skills || [];
+    }, [skillsResponse]);
+
+    const tags = useMemo(() => skillsArray.map((skill, index) => <SkillTag key={index} skill={skill} />), [skillsArray]);
 
     return (
         <div style={{ maxWidth: '1200px', margin: '0 auto' }} id="skills">
             <h1 className="kaushan-script-regular" style={{ fontSize: '50px', textAlign: 'center' }}>My Skill Set</h1>
-            <div
+
+            {isLoading ? (
+                <div>Loading skills…</div>
+            ) : isError ? (
+                <div>Failed to load skills information</div>
+            ) : <div
                 style={{
                     display: "grid",
                     gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
@@ -37,7 +50,8 @@ const Skills = () => {
                 }}
             >
                 {tags}
-            </div>
+            </div>}
+
         </div>
     );
 };

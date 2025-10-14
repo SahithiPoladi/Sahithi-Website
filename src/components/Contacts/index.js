@@ -1,18 +1,37 @@
-import React from "react";
-import { Card, Form, Input, Button, message, Row, Col, Flex } from "antd";
-import { contact } from "../utils";
+import React, { useState } from "react";
+import { Card, Form, Input, Button, message, Row, Col, Space } from "antd";
 import "./index.css";
+import { LinkedinOutlined, GithubOutlined, InstagramOutlined } from '@ant-design/icons';
+import { useQuery } from '@tanstack/react-query';
+import { fetchContactQuery, sendContact } from '../../apiService';
 
 const { TextArea } = Input;
 
 const Contacts = () => {
   const [form] = Form.useForm();
 
+  const {
+    data: contactResponse, isLoading, isError, error
+  } = useQuery({ queryKey: ['contact'], queryFn: fetchContactQuery });
+
+  const [submitting, setSubmitting] = useState(false);
+
   // Handle form submission
-  const onFinish = (values) => {
-    console.log("Form Values:", values);
-    message.success("Email sent successfully!");
-    form.resetFields();
+  const onFinish = async (values) => {
+    try {
+      setSubmitting(true);
+      // POST to server using centralized apiService
+      const data = await sendContact(values);
+      message.success(data.message || 'Email sent successfully!');
+      form.resetFields();
+    } catch (err) {
+      console.error('Network error:', err);
+      // axios errors may contain response.data
+      const errMsg = err?.response?.data?.error || err.message || 'Failed to send email';
+      message.error(errMsg);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const onReset = () => {
@@ -74,6 +93,14 @@ const Contacts = () => {
               </Form.Item>
 
               <Form.Item
+                label={<span className="form-label">Email</span>}
+                name="email"
+                rules={[{ required: true, message: "Please enter your email" }]}
+              >
+                <Input className="form-input" placeholder="Enter your email" />
+              </Form.Item>
+
+              <Form.Item
                 label={<span className="form-label">Subject</span>}
                 name="subject"
                 rules={[{ required: true, message: "Please enter a subject" }]}
@@ -102,8 +129,8 @@ const Contacts = () => {
                   <Button htmlType="button" onClick={onReset} className="form-buttons">
                     Reset
                   </Button>
-                  <Button type="primary" htmlType="submit" className="form-buttons">
-                    Send
+                  <Button type="primary" htmlType="submit" className="form-buttons" loading={submitting} disabled={submitting}>
+                    {submitting ? 'Sending...' : 'Send'}
                   </Button>
                 </div>
               </Form.Item>
@@ -119,26 +146,45 @@ const Contacts = () => {
             out using the form or through my social media links below.
           </p>
 
-          <Flex justify="center" align="center" gap="large" wrap>
-            {contact.map((item) => (
-              <a
-                key={item.id}
-                href={item.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  textAlign: "center",
-                  textDecoration: "none",
-                  color: "inherit",
-                }}
-              >
-                <Flex vertical align="center" gap="small">
-                  <div className="contact-icons">{item.icon}</div>
-                  <p className="unna-regular">{item.name}</p>
-                </Flex>
-              </a>
-            ))}
-          </Flex>
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            {isLoading ? (
+              <div>Loading contact info…</div>
+            ) : isError ? (
+              <div>Failed to load Contact information</div>
+            ) : (
+              (() => {
+                const iconsMap = {
+                  LinkedinOutlined: LinkedinOutlined,
+                  GithubOutlined: GithubOutlined,
+                  InstagramOutlined: InstagramOutlined,
+                };
+
+                return contactResponse?.contactInfo?.map((item) => {
+                  const IconComp = iconsMap[item.icon] || GithubOutlined;
+                  return (
+                    <a
+                      key={item._id}
+                      href={item.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        textAlign: "center",
+                        textDecoration: "none",
+                        color: "inherit",
+                        margin: '0 12px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <div className="contact-icons"><IconComp style={{ fontSize: 24 }} /></div>
+                      <p className="unna-regular">{item.name}</p>
+                    </a>
+                  );
+                });
+              })()
+            )}
+          </div>
         </Col>
       </Row>
     </div>

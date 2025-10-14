@@ -1,32 +1,11 @@
-import React, { useMemo, useRef, useState, useEffect } from "react";
-import { experience } from '../utils';
+import React, { useMemo } from "react";
+import { useQuery } from '@tanstack/react-query';
+import { fetchExperienceQuery } from '../../apiService';
 
 const WorkItem = React.memo(({ exp }) => {
-    // Lazy mount content only when item is near viewport to avoid layout
-    // thrashing when scrolling through many items.
-    const ref = useRef(null);
-    const [visible, setVisible] = useState(false);
-
-    useEffect(() => {
-        const el = ref.current;
-        if (!el) return;
-
-        const obs = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    setVisible(true);
-                    obs.unobserve(el);
-                }
-            });
-        }, { root: null, rootMargin: '200px', threshold: 0.01 });
-
-        obs.observe(el);
-        return () => obs.disconnect();
-    }, []);
-
     return (
-        <div ref={ref} style={{ minHeight: 120, display: 'flex', alignItems: 'center' }}>
-            {visible ? (
+        <div style={{ minHeight: 120, display: 'flex', alignItems: 'center' }}>
+            {exp ? (
                 <div
                     style={{
                         display: "flex",
@@ -86,28 +65,41 @@ const WorkItem = React.memo(({ exp }) => {
 });
 
 const Work = () => {
-    const sortedExperience = useMemo(() => [...experience].sort((a, b) => b.id - a.id), []);
+    // fetch experiences once at the parent level
+    const { data: experienceResponse, isLoading, isError, error } = useQuery({ queryKey: ['experience'], queryFn: fetchExperienceQuery });
+
+    const experiences = useMemo(() => {
+        if (!experienceResponse?.experiences) return [];
+        return [...experienceResponse.experiences].sort((a, b) => (a._id < b._id ? 1 : -1));
+    }, [experienceResponse]);
 
     return (
         <>
             <h1 className="kaushan-script-regular" style={{ fontSize: '50px', textAlign: 'center' }}>Professional Work Experience</h1>
-            <div style={{ position: "relative", maxWidth: '1200px', margin: '0 auto' }}>
-                <div
-                    style={{
-                        position: "absolute",
-                        left: "50%",
-                        top: 0,
-                        bottom: 0,
-                        width: "4px",
-                        background: "linear-gradient(180deg, #1c1026, #c6bbb9, #4c1e3c, #21242b, #7a748c)",
-                        transform: "translateX(-50%)",
-                        zIndex: 0
-                    }}
-                />
-                {sortedExperience.map((exp) => (
-                    <WorkItem key={exp.id} exp={exp} />
-                ))}
-            </div>
+            {isLoading ? (
+                <div>Loading experiences…</div>
+            ) : isError ? (
+                <div>Failed to load experiences information</div>
+            ) : (
+                <div style={{ position: "relative", maxWidth: '1200px', margin: '0 auto' }}>
+                    <div
+                        style={{
+                            position: "absolute",
+                            left: "50%",
+                            top: 0,
+                            bottom: 0,
+                            width: "4px",
+                            background: "linear-gradient(180deg, #1c1026, #c6bbb9, #4c1e3c, #21242b, #7a748c)",
+                            transform: "translateX(-50%)",
+                            zIndex: 0
+                        }}
+                    />
+
+                    {experiences.map((exp) => (
+                        <WorkItem key={exp._id} exp={exp} />
+                    ))}
+                </div>
+            )}
         </>
     );
 };

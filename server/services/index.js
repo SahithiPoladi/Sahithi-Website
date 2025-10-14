@@ -75,8 +75,68 @@ async function getContactInfo(query = {}) {
     }
 }
 
+/**
+ * Fetch About Me info from the configured collection.
+ * @param {Object} query - MongoDB find query
+ * @returns {Promise<Array>} array of about me documents
+ */
+async function getAboutMe(query = {}) {
+    try {
+        console.log(`Entering getAboutMe service function`);
+        const db = getDb();
+        const aboutMe = await db.collection(dbCollections.aboutMeCollection).find(query).toArray();
+        if (!aboutMe) {
+            throw new Error('No about me info found');
+        } else {
+            return {
+                count: aboutMe.length,
+                aboutMe: aboutMe,
+                message: 'About me info fetched successfully'
+            }
+        }
+    } catch (err) {
+        console.error('Error in getAboutMe service:', err);
+        throw err;
+    }
+}
+
+/**
+ * Persist a contact form submission to the contact collection.
+ * @param {Object} submission - { name, email, subject, message, ip, userAgent, createdAt }
+ * @returns {Promise<Object>} insertedId and message
+ */
+async function saveContact(submission = {}) {
+    try {
+        console.log('Entering saveContact service function');
+        if (!submission || typeof submission !== 'object') {
+            throw new Error('Invalid submission object');
+        }
+        const db = getDb();
+        const doc = {
+            name: submission.name || '',
+            email: submission.email || '',
+            subject: submission.subject || '',
+            message: submission.message || '',
+            ip: submission.ip || null,
+            userAgent: submission.userAgent || null,
+            createdAt: submission.createdAt || new Date(),
+        };
+
+        const result = await db.collection(dbCollections.contactCollection).insertOne(doc);
+        return {
+            insertedId: result.insertedId,
+            message: 'Contact submission saved successfully',
+        };
+    } catch (err) {
+        console.error('Error in saveContact service:', err);
+        throw err;
+    }
+}
+
 module.exports = {
     getSkillSets,
     getExperiences,
     getContactInfo,
+    getAboutMe,
+    saveContact,
 };
