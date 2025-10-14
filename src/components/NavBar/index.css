@@ -45,3 +45,42 @@
   color: #d9dddc !important;
   border: 1px solid rgba(255, 255, 255, 0.08) !important;
 }
+
+.mobile-menu-trigger {
+  display: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .headers {
+    height: 64px !important;
+  }
+
+  .desktop-menu {
+    display: none !important;
+  }
+
+  .mobile-menu-trigger {
+    display: block !important;
+  }
+}
+
+/* Work timeline responsive stack */
+@media (max-width: 768px) {
+  .work-timeline {
+    display: none !important;
+  }
+
+  .work-item {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 8px;
+  }
+
+  .work-left,
+  .work-right {
+    width: 100% !important;
+    text-align: left !important;
+    padding: 0 !important;
+  }
+}

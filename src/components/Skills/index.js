@@ -34,8 +34,8 @@ const Skills = () => {
     const tags = useMemo(() => skillsArray.map((skill, index) => <SkillTag key={index} skill={skill} />), [skillsArray]);
 
     return (
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }} id="skills">
-            <h1 className="kaushan-script-regular" style={{ fontSize: '50px', textAlign: 'center' }}>My Skill Set</h1>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 16px' }} id="skills">
+            <h1 className="kaushan-script-regular section-title">My Skill Set</h1>
 
             {isLoading ? (
                 <div>Loading skills…</div>
