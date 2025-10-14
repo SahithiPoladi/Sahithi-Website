@@ -1,6 +1,7 @@
 const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
+const path = require('path');
 const { connectToDb, getDb } = require('./config');
 const dotenv = require('dotenv');
 
@@ -26,6 +27,16 @@ connectToDb((err) => {
         // mount routes under /api/v1
         const routers = require('./routes');
         app.use('/api/v1', routers);
+
+        // Serve the React build in production
+        if (process.env.NODE_ENV === 'production') {
+            const buildPath = path.join(__dirname, '..', 'build');
+            app.use(express.static(buildPath));
+            // For any other route, serve index.html so client-side routing works
+            app.get('*', (req, res) => {
+                res.sendFile(path.join(buildPath, 'index.html'));
+            });
+        }
 
         const server = app.listen(port, async () => {
             console.log(`Server running on port ${port}`);
