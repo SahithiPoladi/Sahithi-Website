@@ -65,6 +65,19 @@ async function getAboutMe(req, res) {
     }
 }
 
+async function getProjects(req, res) {
+    try {
+        console.log(`Entering getProjects controller`);
+        const query = { ...req.query };
+        const result = await services.getProjects(query);
+        console.log(`Successfully returned Projects data`);
+        res.json(result);
+    } catch (err) {
+        console.error('Error in getProjects controller:', err);
+        res.status(500).json({ error: err.message });
+    }
+}
+
 // POST /contact - accept contact form submissions and send email
 async function sendContact(req, res) {
     try {
@@ -222,4 +235,5 @@ module.exports = {
     getContactInfo,
     sendContact,
     getAboutMe,
+    getProjects,
 };

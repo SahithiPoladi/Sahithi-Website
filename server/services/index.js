@@ -101,6 +101,31 @@ async function getAboutMe(query = {}) {
 }
 
 /**
+ * Fetch Projects info from the configured collection.
+ * @param {Object} query - MongoDB find query
+ * @returns {Promise<Array>} array of project documents
+ */
+async function getProjects(query = {}) {
+    try {
+        console.log(`Entering getProjects service function`);
+        const db = getDb();
+        const projects = await db.collection(dbCollections.projectsCollection).find(query).toArray();
+        if (!projects) {
+            throw new Error('No projects info found');
+        } else {
+            return {
+                count: projects.length,
+                projects: projects,
+                message: 'Projects info fetched successfully'
+            }
+        }
+    } catch (err) {
+        console.error('Error in getProjects service:', err);
+        throw err;
+    }
+}
+
+/**
  * Persist a contact form submission to the contact collection.
  * @param {Object} submission - { name, email, subject, message, ip, userAgent, createdAt }
  * @returns {Promise<Object>} insertedId and message
@@ -139,4 +164,5 @@ module.exports = {
     getContactInfo,
     getAboutMe,
     saveContact,
+    getProjects,
 };

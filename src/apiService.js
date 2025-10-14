@@ -60,3 +60,14 @@ export const sendContact = async (payload) => {
         throw error;
     }
 };
+
+export const fetchProjectsQuery = async () => {
+    try {
+        const url = `${apiBaseUrl.replace(/\/$/, '')}/projects`;
+        const response = await axios.get(url);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching projects info:', error);
+        throw error;
+    }
+};

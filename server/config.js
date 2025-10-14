@@ -34,6 +34,7 @@ const dbCollections = {
     experienceCollection: process.env.EXPERIENCE_COLLECTION || 'experience',
     contactCollection: process.env.CONTACT_COLLECTION || 'contactMe',
     aboutMeCollection: process.env.ABOUT_ME_COLLECTION || 'aboutMe',
+    projectsCollection: process.env.PROJECTS_COLLECTION || 'projects',
 };
 
 module.exports = {

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Layout, Menu, Button, Row, Col, Drawer } from 'antd';
+import { useNavigate, useLocation } from 'react-router-dom';
 import spLogo from '../../common/images/sp.png';
 import { DownloadOutlined, MenuOutlined, CloseOutlined } from '@ant-design/icons';
 import './index.css';
@@ -8,6 +9,8 @@ const resumePath = '/Sahithi_Poladi.pdf';
 const { Header } = Layout;
 
 const NavBar = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [selectedKey, setSelectedKey] = useState('home');
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -49,13 +52,27 @@ const NavBar = () => {
     {
       key: 'contact',
       value: 'Contact',
+    },
+    {
+      key: 'projects',
+      value: 'Projects',
     }
   ];
 
   const onItemSelect = (e) => {
-    setSelectedKey(e.key);
-    // navigate within the single page app
-    scrollToId(e.key);
+    const key = e.key;
+    setSelectedKey(key);
+    if (key === 'projects') {
+      navigate('/projects');
+    } else {
+      if (location.pathname !== '/') {
+        navigate('/');
+        // Wait for route change paint then scroll
+        setTimeout(() => scrollToId(key), 50);
+      } else {
+        scrollToId(key);
+      }
+    }
     setMobileOpen(false);
   }
 
@@ -83,10 +100,12 @@ const NavBar = () => {
       }
     }, observerOptions);
 
-    sectionIds.forEach(id => {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
-    });
+    if (location.pathname === '/') {
+      sectionIds.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) observer.observe(el);
+      });
+    }
 
     // run once on mount to set initial menu state based on current viewport
     // find the first observed element that intersects
@@ -94,7 +113,22 @@ const NavBar = () => {
     return () => {
       observer.disconnect();
     };
-  }, []);
+  }, [location.pathname]);
+
+  // Keep selected key in sync when navigating to /projects directly
+  useEffect(() => {
+    if (location.pathname.startsWith('/projects')) {
+      setSelectedKey('projects');
+    } else if (!items.find(i => i.key === selectedKey)) {
+      setSelectedKey('home');
+    }
+  }, [location.pathname]);
+
+  const onLogoclick = () => {
+    setSelectedKey('home');
+    scrollToId('home');
+    navigate('/');
+  };
 
   return (
     <>
@@ -106,7 +140,7 @@ const NavBar = () => {
           <Col>
             <Button
               type="text"
-              onClick={() => { setSelectedKey('home'); scrollToId('home'); }}
+              onClick={onLogoclick}
               style={{ display: 'flex', alignItems: 'center', gap: 8, fontWeight: 'bold', fontSize: 18, color: '#d9dddc' }}
             >
               <img src={spLogo} alt="logo" style={{ height: 45, width: 45, objectFit: 'contain' }} />
