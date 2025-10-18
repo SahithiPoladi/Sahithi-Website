@@ -15,9 +15,10 @@ const WorkItem = React.memo(({ exp }) => {
                         zIndex: 1,
                         width: '100%'
                     }}
+                    className="work-item"
                 >
                     {/* Left side: title, company, duration */}
-                    <div className="unna-regular" style={{ width: "45%", textAlign: "right", paddingRight: "40px" }}>
+                    <div className="unna-regular work-left" style={{ width: "45%", textAlign: "right", paddingRight: "40px" }}>
                         <h2 style={{ marginBottom: '5px' }}>{exp.title}</h2>
                         <h3 style={{ marginBottom: '5px' }}>{exp.company}</h3>
                         <p style={{ marginBottom: '5px' }}><strong>Duration:</strong> {exp.duration}</p>
@@ -48,7 +49,7 @@ const WorkItem = React.memo(({ exp }) => {
                         />
                     </div>
                     {/* Right side: applications, description */}
-                    <div className="unna-regular" style={{ width: "45%", textAlign: "left", paddingLeft: "40px" }}>
+                    <div className="unna-regular work-right" style={{ width: "45%", textAlign: "left", paddingLeft: "40px" }}>
                         <p style={{ marginBottom: '10px' }}><strong>Applications:</strong> {exp.applications}</p>
                         <p style={{ margin: 0 }}>{exp.description}</p>
                     </div>
@@ -75,14 +76,15 @@ const Work = () => {
 
     return (
         <>
-            <h1 className="kaushan-script-regular" style={{ fontSize: '50px', textAlign: 'center' }}>Professional Work Experience</h1>
+            <h1 className="kaushan-script-regular section-title">Professional Work Experience</h1>
             {isLoading ? (
                 <div>Loading experiences…</div>
             ) : isError ? (
                 <div>Failed to load experiences information</div>
             ) : (
-                <div style={{ position: "relative", maxWidth: '1200px', margin: '0 auto' }}>
+                <div style={{ position: "relative", maxWidth: '1200px', margin: '0 auto', padding: '0 16px' }}>
                     <div
+                        className="work-timeline"
                         style={{
                             position: "absolute",
                             left: "50%",

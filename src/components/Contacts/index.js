@@ -47,14 +47,7 @@ const Contacts = () => {
       }}
       id="contacts"
     >
-      <h1
-        className="kaushan-script-regular"
-        style={{
-          fontSize: "56px",
-          textAlign: "center",
-          marginBottom: "50px",
-        }}
-      >
+      <h1 className="kaushan-script-regular section-title" style={{ marginBottom: 32 }}>
         Get In Touch
       </h1>
 

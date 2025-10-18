@@ -22,13 +22,13 @@ const About = () => {
     const points = aboutResponse?.aboutMe?.[0]?.data ?? [];
 
     return (
-        <div>
-            <h1 className="kaushan-script-regular" style={{ fontSize: '50px', textAlign: 'center' }}>About Me</h1>
+        <div style={{ padding: '0 16px' }}>
+            <h1 className="kaushan-script-regular section-title">About Me</h1>
             {isLoading ? <div>Loading...</div> :
                 isError ? <div>Failed to load about information.</div> :
                     <Card
                         style={{
-                            maxWidth: '1200px',
+                            maxWidth: '1000px',
                             margin: '0 auto',
                             textAlign: 'left',
                         }}

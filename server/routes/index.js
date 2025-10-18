@@ -7,5 +7,6 @@ router.get('/experience', controller.getExperience);
 router.get('/contact', controller.getContactInfo);
 router.post('/contact', controller.sendContact);
 router.get('/about', controller.getAboutMe);
+router.get('/projects', controller.getProjects);
 
 module.exports = router;
