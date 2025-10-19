@@ -24,6 +24,11 @@ connectToDb((err) => {
         // request logging
         app.use(morgan('dev'));
 
+        // lightweight health check for load balancers / ECS
+        app.get('/health', (req, res) => {
+            res.status(200).json({ status: 'ok', uptime: process.uptime() });
+        });
+
         // mount routes under /api/v1
         const routers = require('./routes');
         app.use('/api/v1', routers);

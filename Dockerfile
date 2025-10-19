@@ -30,5 +30,11 @@ COPY --from=client-build /app/build /usr/src/build
 ENV NODE_ENV=production
 EXPOSE 5000
 
+# Install curl for container healthcheck
+RUN apk add --no-cache curl
+
+# Healthcheck for ECS/containers
+HEALTHCHECK --interval=30s --timeout=5s --retries=3 CMD curl -fsS http://localhost:5000/health || exit 1
+
 # The server reads PORT from env (defaults to 5000) and serves static build in production
 CMD ["node", "index.js"]

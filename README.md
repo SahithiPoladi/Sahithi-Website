@@ -107,3 +107,51 @@ Notes:
 - The server will be available on port 5000 by default (map: host:5000 -> container:5000).
 - The compose file defines a `mongo` service; by default the server connects to `mongodb://mongo:27017` when using the provided `.env`.
 - For production deployments behind a reverse proxy, set `CLIENT_ORIGIN` to your frontend domain and configure TLS at the proxy layer.
+
+## Deployment (Unified FE + BE Docker image)
+
+This repository builds a single image that serves both the API (/api/v1) and the static React build. The container listens on port 5000 and exposes a health endpoint at /health.
+
+- ECR repositories (already created):
+  - 283141160547.dkr.ecr.us-east-2.amazonaws.com/sahithi-portfolio (unified)
+  - 283141160547.dkr.ecr.us-east-2.amazonaws.com/sahithi-portfolio-backend (legacy)
+
+### One-command deploy with AWS CLI
+
+Prereqs:
+- AWS CLI v2 configured with access to the target account/region
+- jq, docker installed
+- An existing ECS cluster and service to update
+
+Export the following and run the script:
+
+```bash
+export REGION=us-east-2
+export ACCOUNT_ID=283141160547
+export ECR_REPO=sahithi-portfolio
+export ECS_CLUSTER=<your-ecs-cluster>
+export ECS_SERVICE=<your-ecs-service>
+# optional
+export IMAGE_TAG=$(git rev-parse --short HEAD)
+export PORT=5000
+
+./scripts/deploy-unified.sh
+```
+
+The script will:
+1) Ensure the ECR repo exists
+2) Log in to ECR
+3) Build the Docker image from this repo
+4) Push it to ECR with the chosen tag
+5) Create a new ECS task definition revision, pointing to the new image and mapping containerPort 5000
+6) Update the ECS service to the new task definition
+7) Wait until the service is stable
+
+Notes:
+- If your service uses an Application Load Balancer, set the target group health check path to /health and port to traffic port.
+- If you are migrating from separate FE/BE tasks to this unified image, update the service to only run this task and set desired count appropriately.
+- The server serves the React app in production and mounts the API at /api/v1. During the build we set REACT_APP_API_BASE_URL=/api/v1.
+
+### Rollback
+
+In ECS, choose the previous task definition revision and update the service to use it. Or re-run the script with IMAGE_TAG set to a previous tag.
