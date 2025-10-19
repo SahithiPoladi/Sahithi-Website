@@ -16,42 +16,48 @@ const clientOrigin = process.env.CLIENT_ORIGIN || 'http://localhost:3000';
 let db;
 
 connectToDb((err) => {
-    if (!err) {
-        // middleware
-        // enable CORS for requests from the client origin
-        app.use(cors({ origin: clientOrigin }));
-        app.use(express.json());
-        // request logging
-        app.use(morgan('dev'));
-
-        // lightweight health check for load balancers / ECS
-        app.get('/health', (req, res) => {
-            res.status(200).json({ status: 'ok', uptime: process.uptime() });
-        });
-
-        // mount routes under /api/v1
-        const routers = require('./routes');
-        app.use('/api/v1', routers);
-
-        // Serve the React build in production
-        if (process.env.NODE_ENV === 'production') {
-            const buildPath = path.join(__dirname, '..', 'build');
-            app.use(express.static(buildPath));
-            // For any other route, serve index.html so client-side routing works
-            app.get('*', (req, res) => {
-                res.sendFile(path.join(buildPath, 'index.html'));
-            });
-        }
-
-        const server = app.listen(port, async () => {
-            console.log(`Server running on port ${port}`);
+    if (err) {
+        console.error('Failed to connect to database. Continuing to start server in degraded mode.');
+    } else {
+        try {
             db = getDb();
+        } catch (e) {
+            console.error('Error retrieving DB instance after connection:', e && e.message);
+        }
+    }
 
-            // start optional background scheduler for sending emails
+    // middleware
+    app.use(cors({ origin: clientOrigin }));
+    app.use(express.json());
+    app.use(morgan('dev'));
+
+    // lightweight health check for load balancers / ECS
+    app.get('/health', (req, res) => {
+        res.status(200).json({ status: 'ok', uptime: process.uptime(), db: !!db });
+    });
+
+    // mount routes under /api/v1
+    const routers = require('./routes');
+    app.use('/api/v1', routers);
+
+    // Serve the React build in production
+    if (process.env.NODE_ENV === 'production') {
+        const buildPath = path.join(__dirname, '..', 'build');
+        app.use(express.static(buildPath));
+        // For any other route, serve index.html so client-side routing works
+        app.get('*', (req, res) => {
+            res.sendFile(path.join(buildPath, 'index.html'));
+        });
+    }
+
+    const server = app.listen(port, async () => {
+        console.log(`Server running on port ${port}${db ? '' : ' (DB not connected)'}`);
+
+        // start optional background scheduler for sending emails, only if DB is connected
+        if (db) {
             try {
                 const scheduler = require('./emailScheduler');
                 if (scheduler && scheduler.isEnabled && scheduler.isEnabled()) {
-                    // start with defaults (can be overridden via env vars)
                     scheduler.start().catch((err) => {
                         console.error('Failed to start email scheduler:', err && err.message);
                     });
@@ -61,17 +67,17 @@ connectToDb((err) => {
             } catch (err) {
                 console.error('Error while initializing email scheduler:', err && err.message);
             }
-        });
+        } else {
+            console.log('Skipping scheduler start because DB is not connected.');
+        }
+    });
 
-        server.on('error', (err) => {
-            if (err && err.code === 'EADDRINUSE') {
-                console.error(`Port ${port} is already in use. Please stop the process using it or set a different PORT.`);
-            } else {
-                console.error('Server error:', err);
-            }
-            process.exit(1);
-        });
-    } else {
-        console.error('Failed to connect to database. Server not started.');
-    }
+    server.on('error', (err) => {
+        if (err && err.code === 'EADDRINUSE') {
+            console.error(`Port ${port} is already in use. Please stop the process using it or set a different PORT.`);
+        } else {
+            console.error('Server error:', err);
+        }
+        process.exit(1);
+    });
 });

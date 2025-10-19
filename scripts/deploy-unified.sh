@@ -4,7 +4,8 @@ set -euo pipefail
 # Unified FE+BE image deployer using AWS CLI to ECR/ECS
 # Usage: set env vars below or pass as arguments. Example:
 #   REGION=us-east-2 ACCOUNT_ID=283141160547 ECR_REPO=sahithi-portfolio ECS_CLUSTER=portfolio-cluster ECS_SERVICE=portfolio-service ./scripts/deploy-unified.sh
-# Optional: IMAGE_TAG (default: git short SHA), PORT (default: 5000), CONTAINER_NAME (default: first container), FORCE_PORT (default: false)
+# Optional: IMAGE_TAG (default: git short SHA), PORT (default: 5000), CONTAINER_NAME (default: first container), FORCE_PORT (default: false), SET_PORT_ENV (default: false)
+ # Optional: IMAGE_TAG (default: git short SHA), PORT (default: 5000), CONTAINER_NAME (default: first container), FORCE_PORT (default: false), SET_PORT_ENV (default: false), STRIP_OTHER_CONTAINERS (default: false)
 
 REGION="${REGION:-us-east-2}"
 ACCOUNT_ID="${ACCOUNT_ID:-}"         # e.g. 283141160547
@@ -15,6 +16,8 @@ IMAGE_TAG="${IMAGE_TAG:-}"
 PORT="${PORT:-5000}"
 CONTAINER_NAME="${CONTAINER_NAME:-}"
 FORCE_PORT="${FORCE_PORT:-false}"
+SET_PORT_ENV="${SET_PORT_ENV:-false}"
+STRIP_OTHER_CONTAINERS="${STRIP_OTHER_CONTAINERS:-false}"
 
 if [[ -z "${ACCOUNT_ID}" || -z "${ECS_CLUSTER}" || -z "${ECS_SERVICE}" ]]; then
   echo "ACCOUNT_ID, ECS_CLUSTER, and ECS_SERVICE are required via env vars." >&2
@@ -64,31 +67,41 @@ TASK_DEF=$(aws ecs describe-task-definition --task-definition "$TASK_DEF_ARN" --
 # 7) Create new container definition pointing to our new image while preserving other settings
 #    - If CONTAINER_NAME is set, only update that container; otherwise update the first container
 #    - By default do NOT override portMappings; set FORCE_PORT=true to map to $PORT
-if [[ -n "${CONTAINER_NAME}" ]]; then
-  NEW_CONTAINER_DEFS=$(echo "$TASK_DEF" | jq \
-    --arg IMAGE "$IMAGE" \
-    --argjson PORT ${PORT} \
-    --arg NAME "$CONTAINER_NAME" \
-    --arg FORCE "$FORCE_PORT" \
-    '.containerDefinitions | map(if .name == $NAME then (.image = $IMAGE | (.portMappings = (if $FORCE == "true" then ([{containerPort: $PORT, protocol: "tcp"}]) else .portMappings end)) | .essential = true) else . end)')
-else
-  NEW_CONTAINER_DEFS=$(echo "$TASK_DEF" | jq \
-    --arg IMAGE "$IMAGE" \
-    --argjson PORT ${PORT} \
-    --arg FORCE "$FORCE_PORT" \
-    '(.containerDefinitions) as $defs | $defs 
-      | to_entries
-      | map(if .key == 0 then (.value.image = $IMAGE | (.value.portMappings = (if $FORCE == "true" then ([{containerPort: $PORT, protocol: "tcp"}]) else .value.portMappings end)) | .value.essential = true) else .value end)')
-fi
+NEW_CONTAINER_DEFS=$(echo "$TASK_DEF" | jq \
+  --arg IMAGE "$IMAGE" \
+  --argjson PORT ${PORT} \
+  --arg FORCE "$FORCE_PORT" \
+  --arg SETP "$SET_PORT_ENV" \
+  --arg NAME "$CONTAINER_NAME" \
+  --arg STRIP "$STRIP_OTHER_CONTAINERS" \
+  '
+  def apply($img;$p;$force;$setp):
+    .image = $img
+    | (if $force=="true" then (.portMappings=[{containerPort:$p, protocol:"tcp"}]) else . end)
+    | (if $setp=="true" then (.environment=((.environment // []) | map(select(.name!="PORT")) + [{name:"PORT", value: ($p|tostring)}])) else . end)
+    | (.essential = true);
+
+  (.containerDefinitions) as $cd
+  | (
+      if $STRIP=="true" then
+        (if ($NAME|length) > 0 then [ $cd[] | select(.name == $NAME) ] else (if ($cd|length) > 0 then [ $cd[0] ] else [] end) end)
+      else $cd
+    ) as $filtered
+  | if ($NAME|length) > 0 then
+      ($filtered | map( if .name == $NAME then apply($IMAGE;$PORT;$FORCE;$SETP) else . end))
+    else
+      ($filtered | if (length) > 0 then (.[0] |= apply($IMAGE;$PORT;$FORCE;$SETP)) else . end)
+    end
+  ')
 
 FAMILY=$(echo "$TASK_DEF" | jq -r '.family')
 EXECUTION_ROLE_ARN=$(echo "$TASK_DEF" | jq -r '.executionRoleArn')
 TASK_ROLE_ARN=$(echo "$TASK_DEF" | jq -r '.taskRoleArn')
 NETWORK_MODE=$(echo "$TASK_DEF" | jq -r '.networkMode')
-REQUIRES_COMPATIBILITIES=$(echo "$TASK_DEF" | jq -r '.requiresCompatibilities[]' | jq -R . | jq -s .)
+REQUIRES_COMPATIBILITIES=$(echo "$TASK_DEF" | jq -c '(.requiresCompatibilities // [])')
 CPU=$(echo "$TASK_DEF" | jq -r '.cpu')
 MEMORY=$(echo "$TASK_DEF" | jq -r '.memory')
-VOLUMES=$(echo "$TASK_DEF" | jq -c '.volumes')
+VOLUMES=$(echo "$TASK_DEF" | jq -c '.volumes // []')
 
 # 8) Register new task def revision
 NEW_TASK_DEF=$(jq -n \

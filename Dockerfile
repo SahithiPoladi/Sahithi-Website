@@ -33,8 +33,8 @@ EXPOSE 5000
 # Install curl for container healthcheck
 RUN apk add --no-cache curl
 
-# Healthcheck for ECS/containers
-HEALTHCHECK --interval=30s --timeout=5s --retries=3 CMD curl -fsS http://localhost:5000/health || exit 1
+# Healthcheck for ECS/containers; respect PORT env (default 5000)
+HEALTHCHECK --interval=30s --timeout=5s --retries=3 CMD sh -c 'PORT=${PORT:-5000}; curl -fsS http://localhost:${PORT}/health || exit 1'
 
 # The server reads PORT from env (defaults to 5000) and serves static build in production
 CMD ["node", "index.js"]
