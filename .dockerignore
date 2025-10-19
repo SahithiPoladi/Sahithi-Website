@@ -4,5 +4,4 @@ build
     .env
 server /.env
 npm - debug.log
-Dockerfile
 docker - compose.yml

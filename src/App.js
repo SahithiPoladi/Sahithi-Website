@@ -23,9 +23,6 @@ function LandingPage() {
       <section id="work" style={{ minHeight: '80vh', padding: '48px 24px' }}>
         <Work />
       </section>
-      <section id="projects" style={{ minHeight: '80vh', padding: '48px 24px' }}>
-        <Projects />
-      </section>
       <section id="skills" style={{ minHeight: '80vh', padding: '48px 24px' }}>
         <Skills />
       </section>
