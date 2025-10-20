@@ -2,7 +2,7 @@
   "name": "sahithi_portfolio",
   "version": "0.1.0",
   "private": true,
-  "homepage": ".",
+  "homepage": "https://sahithipoladi.com",
   "dependencies": {
     "@tanstack/react-query": "^5.90.2",
     "@testing-library/dom": "^10.4.1",
@@ -20,6 +20,9 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "postbuild": "cp build/index.html build/404.html",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "start:server": "cd server && npm start",
@@ -40,6 +43,7 @@
     ]
   },
   "devDependencies": {
+    "gh-pages": "^6.2.0",
     "npm-run-all": "^4.1.5",
     "react-router-dom": "^6.3.0",
     "webpack": "^5.101.3",
