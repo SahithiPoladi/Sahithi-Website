@@ -6,7 +6,6 @@ import Home from './components/Home';
 import About from './components/About';
 import Work from './components/Work';
 import Skills from './components/Skills';
-import Contacts from './components/Contacts';
 import StarsBackground from './common/StarsBackground';
 import Projects from './components/Projects';
 
@@ -26,10 +25,6 @@ function LandingPage() {
       <section id="skills" style={{ minHeight: '80vh', padding: '48px 24px' }}>
         <Skills />
       </section>
-      {/* Future contact section can be enabled here */}
-      {/* <section id="contact" style={{ minHeight: '80vh', padding: '48px 24px' }}>
-        <Contacts />
-      </section> */}
     </main>
   );
 }

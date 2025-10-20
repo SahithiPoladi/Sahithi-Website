@@ -1,14 +1,8 @@
 import React, { useMemo } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { fetchProjectsQuery } from '../../apiService';
 import { Card, Button } from 'antd';
 import { projects } from '../../config';
 
 const Projects = () => {
-
-    // const {
-    //     data: projectsResponse, isLoading, isError
-    // } = useQuery({ queryKey: ['projects'], queryFn: fetchProjectsQuery });
 
     const normalize = (val = '') => val.toString().toLowerCase().replace(/[^a-z0-9]+/g, '');
 

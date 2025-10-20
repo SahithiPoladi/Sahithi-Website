@@ -1,6 +1,4 @@
 import React, { useMemo } from "react";
-import { useQuery } from '@tanstack/react-query';
-import { fetchExperienceQuery } from '../../apiService';
 import { experiences } from '../../config';
 
 const WorkItem = React.memo(({ exp }) => {
@@ -67,8 +65,6 @@ const WorkItem = React.memo(({ exp }) => {
 });
 
 const Work = () => {
-    // fetch experiences once at the parent level
-    // const { data: experienceResponse, isLoading, isError, error } = useQuery({ queryKey: ['experience'], queryFn: fetchExperienceQuery });
 
     const experiencesItems = useMemo(() => {
         if (!experiences) return [];

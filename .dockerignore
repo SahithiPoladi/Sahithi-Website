@@ -1,7 +1,0 @@
-node_modules
-build
-    .git
-    .env
-server /.env
-npm - debug.log
-docker - compose.yml
