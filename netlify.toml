@@ -1,0 +1,20 @@
+[build]
+  command = "npm run build"
+  publish = "build"
+
+# React Router (SPA) fallback handled via _redirects
+
+[build.environment]
+  # Improve CI reproducibility
+  CI = "true"
+  NODE_VERSION = "18"
+
+[dev]
+  command = "npm start"
+  port = 8888
+  publish = "build"
+
+[headers]
+  for = "/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
