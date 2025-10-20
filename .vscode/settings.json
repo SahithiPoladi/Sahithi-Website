@@ -1,0 +1,5 @@
+{
+  "editor.formatOnSave": true,
+  // Leave defaultFormatter unset so the user/extension can choose their preferred formatter
+  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"]
+}
