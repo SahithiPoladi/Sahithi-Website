@@ -26,9 +26,10 @@ function LandingPage() {
       <section id="skills" style={{ minHeight: '80vh', padding: '48px 24px' }}>
         <Skills />
       </section>
-      <section id="contact" style={{ minHeight: '80vh', padding: '48px 24px' }}>
+      {/* Future contact section can be enabled here */}
+      {/* <section id="contact" style={{ minHeight: '80vh', padding: '48px 24px' }}>
         <Contacts />
-      </section>
+      </section> */}
     </main>
   );
 }

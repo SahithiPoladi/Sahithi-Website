@@ -1,13 +1,8 @@
 import { Card } from "antd";
 import React from "react";
-import { useQuery } from '@tanstack/react-query';
-import { fetchAboutQuery } from '../../apiService';
+import { aboutMe } from "../../config";
 
 const About = () => {
-    const {
-        data: aboutResponse, isLoading, isError
-    } = useQuery({ queryKey: ['about'], queryFn: fetchAboutQuery });
-
     const renderWithLineBreaks = (text) => {
         if (!text && text !== 0) return null;
         const parts = String(text).split(/<br\s*\/?\s*>/gi);
@@ -19,28 +14,25 @@ const About = () => {
         ));
     };
 
-    const points = aboutResponse?.aboutMe?.[0]?.data ?? [];
+    const points = aboutMe?.[0]?.data ?? [];
 
     return (
         <div style={{ padding: '0 16px' }}>
             <h1 className="kaushan-script-regular section-title">About Me</h1>
-            {isLoading ? <div>Loading...</div> :
-                isError ? <div>Failed to load about information.</div> :
-                    <Card
-                        style={{
-                            maxWidth: '1000px',
-                            margin: '0 auto',
-                            textAlign: 'left',
-                        }}
-                        className="unna-regular card-border-gradient"
-                    >
-                        {points.map(point => (
-                            <p key={point.id} className="unna-regular">
-                                {renderWithLineBreaks(point.points)}
-                            </p>
-                        ))}
-                    </Card>
-            }
+            <Card
+                style={{
+                    maxWidth: '1000px',
+                    margin: '0 auto',
+                    textAlign: 'left',
+                }}
+                className="unna-regular card-border-gradient"
+            >
+                {points.map(point => (
+                    <p key={point.id} className="unna-regular">
+                        {renderWithLineBreaks(point.points)}
+                    </p>
+                ))}
+            </Card>
         </div>
     );
 };

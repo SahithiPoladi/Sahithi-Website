@@ -49,10 +49,10 @@ const NavBar = () => {
       key: 'skills',
       value: 'Skills',
     },
-    {
-      key: 'contact',
-      value: 'Contact',
-    },
+    // {
+    //   key: 'contact',
+    //   value: 'Contact',
+    // },
     {
       key: 'projects',
       value: 'Projects',

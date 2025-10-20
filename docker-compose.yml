@@ -7,14 +7,9 @@ services:
       args:
         # Point client to same-origin API in container
         - REACT_APP_API_BASE_URL=/api/v1
-    env_file:
-      - ./server/.env
-    environment:
-      # Force server to listen on container port 5000 (exposed above)
-      - PORT=5000
     ports:
-      # Expose container port 5000 as 5001 on host (to avoid macOS Control Center on 5000)
-      - "5001:5000"
+      # Expose NGINX port 80 as 5001 on host (avoid macOS Control Center conflicts)
+      - "5001:80"
     restart: unless-stopped
     depends_on: []
 

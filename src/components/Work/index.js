@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
 import { useQuery } from '@tanstack/react-query';
 import { fetchExperienceQuery } from '../../apiService';
+import { experiences } from '../../config';
 
 const WorkItem = React.memo(({ exp }) => {
     return (
@@ -67,41 +68,35 @@ const WorkItem = React.memo(({ exp }) => {
 
 const Work = () => {
     // fetch experiences once at the parent level
-    const { data: experienceResponse, isLoading, isError, error } = useQuery({ queryKey: ['experience'], queryFn: fetchExperienceQuery });
+    // const { data: experienceResponse, isLoading, isError, error } = useQuery({ queryKey: ['experience'], queryFn: fetchExperienceQuery });
 
-    const experiences = useMemo(() => {
-        if (!experienceResponse?.experiences) return [];
-        return [...experienceResponse.experiences].sort((a, b) => (a._id < b._id ? 1 : -1));
-    }, [experienceResponse]);
+    const experiencesItems = useMemo(() => {
+        if (!experiences) return [];
+        return [...experiences].sort((a, b) => (a._id < b._id ? 1 : -1));
+    }, [experiences]);
 
     return (
         <>
             <h1 className="kaushan-script-regular section-title">Professional Work Experience</h1>
-            {isLoading ? (
-                <div>Loading experiences…</div>
-            ) : isError ? (
-                <div>Failed to load experiences information</div>
-            ) : (
-                <div style={{ position: "relative", maxWidth: '1200px', margin: '0 auto', padding: '0 16px' }}>
-                    <div
-                        className="work-timeline"
-                        style={{
-                            position: "absolute",
-                            left: "50%",
-                            top: 0,
-                            bottom: 0,
-                            width: "4px",
-                            background: "linear-gradient(180deg, #1c1026, #c6bbb9, #4c1e3c, #21242b, #7a748c)",
-                            transform: "translateX(-50%)",
-                            zIndex: 0
-                        }}
-                    />
+            <div style={{ position: "relative", maxWidth: '1200px', margin: '0 auto', padding: '0 16px' }}>
+                <div
+                    className="work-timeline"
+                    style={{
+                        position: "absolute",
+                        left: "50%",
+                        top: 0,
+                        bottom: 0,
+                        width: "4px",
+                        background: "linear-gradient(180deg, #1c1026, #c6bbb9, #4c1e3c, #21242b, #7a748c)",
+                        transform: "translateX(-50%)",
+                        zIndex: 0
+                    }}
+                />
 
-                    {experiences.map((exp) => (
-                        <WorkItem key={exp._id} exp={exp} />
-                    ))}
-                </div>
-            )}
+                {experiencesItems.map((exp) => (
+                    <WorkItem key={exp._id} exp={exp} />
+                ))}
+            </div>
         </>
     );
 };
