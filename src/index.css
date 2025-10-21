@@ -1,4 +1,12 @@
-@import url("https://fonts.googleapis.com/css2?family=Kaushan+Script&family=Unna:ital,wght@0,400;0,700;1,400;1,700&display=swap");
+/* Ensure Ant Design Card internals don't paint a solid background */
+.card-border-gradient .ant-card,
+.card-border-gradient .ant-card-body,
+.card-border-gradient .ant-card-cover,
+.card-border-gradient .ant-card-head {
+  background: transparent !important;
+}
+
+/* Fonts are loaded via public/index.html to allow better control; display=swap is used to avoid render-blocking */
 
 body {
   margin: 0;
@@ -82,11 +90,16 @@ body,
       #445454);
   /* solid fallback color used during overscroll/bounce on some browsers (iOS/Chrome) */
   background-color: #040b14;
-  /* keep the background visually consistent during scroll and overscroll */
-  background-attachment: fixed;
+  /* Avoid background-attachment: fixed on mobile to prevent scroll jank */
+  background-attachment: scroll;
+  /* Ensure gradient covers viewport and remains consistent on iOS */
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  /* Prevent double scroll areas and layout issues on small screens */
   color: #d9dddc;
-  min-height: 100%;
-  height: 100%;
+  /* Cover entire viewport and allow page to grow with content */
+  min-height: 100vh;
   /* prevent scroll chaining / rubber-band showing the underlying white page */
   overscroll-behavior: contain;
   overscroll-behavior-y: contain;
@@ -94,11 +107,22 @@ body,
   -webkit-overflow-scrolling: touch;
 }
 
+/* On wider screens, re-enable fixed background for a nice parallax-like look */
+@media (min-width: 769px) {
+
+  html,
+  body,
+  #root {
+    background-attachment: fixed;
+  }
+}
+
 .ant-layout,
 .ant-layout-header,
 .ant-layout-content,
 .ant-layout-footer {
-  background: #0d0907;
+  /* Let the global gradient show through, keep text color consistent */
+  background: transparent !important;
   color: #d9dddc;
 }
 
@@ -118,11 +142,19 @@ a {
 }
 
 .card-border-gradient {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(8px);
+  background: transparent;
+  backdrop-filter: blur(6px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* On mobile, backdrop-filter and heavy shadows can cause jank; tone them down */
+@media (max-width: 768px) {
+  .card-border-gradient {
+    backdrop-filter: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
 }
 
 .contact-icons {
@@ -142,4 +174,44 @@ a {
     width: 44px;
     height: 44px;
   }
+}
+
+/* Projects grid responsive layout */
+.projects-grid {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(12, 1fr);
+}
+
+.projects-grid .ant-card {
+  grid-column: span 6;
+}
+
+/* Medium screens: 2 columns */
+@media (max-width: 1024px) {
+  .projects-grid .ant-card {
+    grid-column: span 6;
+  }
+}
+
+/* Small screens: 1 column full-width */
+@media (max-width: 600px) {
+  .projects-grid {
+    gap: 16px;
+    padding: 0 12px;
+  }
+
+  .projects-grid .ant-card {
+    grid-column: 1 / -1;
+  }
+}
+
+/* Ensure header and footer surfaces remain readable over gradient */
+.ant-layout-header,
+.ant-layout-footer {
+  background: rgba(13, 9, 7, 0.6) !important;
+  -webkit-backdrop-filter: saturate(100%) blur(2px);
+  backdrop-filter: saturate(100%) blur(2px);
 }

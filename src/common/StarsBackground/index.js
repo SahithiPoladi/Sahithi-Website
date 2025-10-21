@@ -5,7 +5,7 @@ const StarsBackground = () => {
   // Palette requested by the user
   const PALETTE = ["#B1D4EF", "#BEDBF0", "#C7EBF2", "#D7EDEB", "#EBF8F5"];
   // Reduced default star count to improve performance on low-end devices
-  const STAR_COUNT = 120;
+  const STAR_COUNT = (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(max-width: 768px)').matches) ? 60 : 120;
 
   // helper to convert hex to rgba string with alpha
   const hexToRgba = (hex, alpha = 1) => {
@@ -92,6 +92,13 @@ const StarsBackground = () => {
       if (timeout) clearTimeout(timeout);
     };
   }, []);
+
+  // On small screens or if reduced-motion is preferred, render nothing to avoid jank
+  const isSmall = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(max-width: 480px)').matches;
+  const reduced = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (isSmall || reduced) {
+    return null;
+  }
 
   return (
     <div ref={overlayRef} className="stars-overlay" aria-hidden="true">

@@ -147,7 +147,7 @@ const NavBar = () => {
               onClick={onLogoclick}
               style={{ display: 'flex', alignItems: 'center', gap: 8, fontWeight: 'bold', fontSize: 18, color: '#d9dddc' }}
             >
-              <img src={spLogo} alt="logo" style={{ height: 45, width: 45, objectFit: 'contain' }} />
+              <img src={spLogo} alt="logo" style={{ height: 45, width: 45, objectFit: 'contain' }} width={45} height={45} loading="lazy" decoding="async" />
             </Button>
           </Col>
           <Col style={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-end' }} className="desktop-menu">
@@ -197,7 +197,7 @@ const NavBar = () => {
         open={mobileOpen}
         bodyStyle={{ padding: 0, background: '#0d0907' }}
         headerStyle={{ background: '#0d0907', borderBottom: '1px solid #333' }}
-        styles={{ mask: { backdropFilter: 'blur(2px)' } }}
+        styles={{ mask: { backdropFilter: 'none' } }}
       >
         <Menu
           mode="inline"
