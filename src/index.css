@@ -176,20 +176,20 @@ a {
   }
 }
 
-/* Force project link button text to be light, regardless of card text color */
+/* Project link button text color across states */
 .project-link-btn.ant-btn,
 .project-link-btn.ant-btn>span,
 .project-link-btn.ant-btn:visited,
 .project-link-btn.ant-btn:hover,
 .project-link-btn.ant-btn:active,
 .project-link-btn.ant-btn:focus {
-  color: #d9dddc !important;
+  color: #1b1b1b !important;
 }
 
 /* Keep its background and border consistent */
 .project-link-btn.ant-btn {
-  background: #b82152 !important;
-  border: 3px solid #b82152 !important;
+  background: #ff9657 !important;
+  border: 3px solid #ff9657 !important;
 }
 
 /* Projects grid responsive layout */

@@ -1,9 +1,11 @@
 import React, { useMemo, useEffect, useRef } from "react";
 import "./index.css";
 
-const StarsBackground = () => {
-  // Palette requested by the user
-  const PALETTE = ["#B1D4EF", "#BEDBF0", "#C7EBF2", "#D7EDEB", "#EBF8F5"];
+const StarsBackground = ({ palette }) => {
+  // Palette (can be provided by parent). Defaults to the site's requested palette if not given.
+  const PALETTE = Array.isArray(palette) && palette.length > 0
+    ? palette
+    : ["#de3f52", "#a81c66", "#ee5b48", "#b82152"]; // default to requested reds palette
   // Reduced default star count to improve performance on low-end devices
   const STAR_COUNT = (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(max-width: 768px)').matches) ? 60 : 120;
 
@@ -28,7 +30,7 @@ const StarsBackground = () => {
       const delay = Math.random() * 6; // s
       const duration = 1.5 + Math.random() * 4; // s
       const color = PALETTE[Math.floor(Math.random() * PALETTE.length)];
-      const glow = hexToRgba(color, 0.35);
+      const glow = hexToRgba(color, 0.6);
 
       // Use CSS variables to control per-star visuals (size, glow, halo)
       const style = {
@@ -38,13 +40,13 @@ const StarsBackground = () => {
         height: `${size}px`,
         animationDelay: `${delay}s`,
         animationDuration: `${duration}s`,
-        backgroundColor: hexToRgba(color, 0.95),
+        backgroundColor: hexToRgba(color, 1),
         '--star-size': `${size}px`,
         '--glow-color': glow,
         '--glow-radius': `${Math.max(8, size * 6)}px`,
         '--halo-alpha': `${Math.max(0.03, Math.min(0.18, 0.03 + size * 0.03))}`,
-        boxShadow: `0 0 ${Math.max(4, size * 4)}px ${Math.max(1, size)}px ${hexToRgba(color, 0.22)}`,
-        opacity: 0.9,
+        boxShadow: `0 0 ${Math.max(6, size * 5)}px ${Math.max(1.5, size * 1.2)}px ${hexToRgba(color, 0.45)}`,
+        opacity: 1,
         // hint to the browser this element will only be transformed/opacity-changed
         willChange: 'opacity, transform',
         pointerEvents: 'none',
@@ -100,8 +102,16 @@ const StarsBackground = () => {
     return null;
   }
 
+  // Expose palette to CSS via custom properties for ::before/::after decorative dots
+  const overlayStyle = {
+    "--palette-1": PALETTE[0] || '#de3f52',
+    "--palette-2": PALETTE[1] || '#a81c66',
+    "--palette-3": PALETTE[2] || '#ee5b48',
+    "--palette-4": PALETTE[3] || '#b82152',
+  };
+
   return (
-    <div ref={overlayRef} className="stars-overlay" aria-hidden="true">
+    <div ref={overlayRef} className="stars-overlay" aria-hidden="true" style={overlayStyle}>
       {stars}
     </div>
   );
