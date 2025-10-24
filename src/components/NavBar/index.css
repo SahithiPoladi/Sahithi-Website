@@ -36,12 +36,17 @@
   left: 0;
   right: 0;
   z-index: 1000;
-  background-color: rgba(13, 9, 7, 0.6);
-  border-bottom: 1px solid transparent;
+  background-color: #ff9657;
+  /* gradient bottom border */
+  border: 0;
+  border-bottom-width: 2px;
+  border-style: solid;
+  border-image-slice: 1;
+  border-image-source: linear-gradient(45deg, #a81c66, #b82152, #de3f52, #ee5b48);
 }
 
 .resume-button {
-  background: #073b41 !important;
+  background: #b82152 !important;
   color: #d9dddc !important;
   border: 1px solid rgba(255, 255, 255, 0.08) !important;
 }

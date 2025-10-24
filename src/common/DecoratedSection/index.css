@@ -1,0 +1,103 @@
+.decorated-section {
+    position: relative;
+    padding: 48px 24px;
+    /* keep existing spacing defaults */
+    overflow: visible;
+    /* allow glow to extend */
+}
+
+/* Content sits above accents */
+.decorated-section-content {
+    position: relative;
+    z-index: 1;
+}
+
+/* Base style for accent rectangles */
+.decorated-section .accent-rect {
+    position: absolute;
+    border-radius: 28px;
+    background: var(--rect-color, #a81c66);
+    opacity: 0.95;
+    box-shadow:
+        0 24px 80px rgba(0, 0, 0, 0.25),
+        0 0 220px 56px var(--glow, rgba(168, 28, 102, 0.38));
+    pointer-events: none;
+}
+
+/* Subtle inner glow */
+.decorated-section .accent-rect::before {
+    content: "";
+    position: absolute;
+    inset: -12%;
+    border-radius: inherit;
+    background: radial-gradient(ellipse at center, var(--glow, rgba(168, 28, 102, 0.36)) 0%, rgba(255, 255, 255, 0) 70%);
+    filter: blur(12px);
+}
+
+/* Left group positions (sizes scale with container via percentages + clamps) */
+.decorated-section .left-primary {
+    left: -8%;
+    top: 6%;
+    width: clamp(220px, 36%, 640px);
+    height: clamp(180px, 52%, 640px);
+    transform: rotate(-7deg);
+}
+
+.decorated-section .left-secondary {
+    left: -4%;
+    top: 28%;
+    width: clamp(180px, 30%, 520px);
+    height: clamp(140px, 44%, 520px);
+    transform: rotate(-2deg);
+}
+
+/* Right group */
+.decorated-section .right-primary {
+    right: -8%;
+    top: 10%;
+    width: clamp(220px, 36%, 640px);
+    height: clamp(180px, 52%, 640px);
+    transform: rotate(8deg);
+}
+
+.decorated-section .right-secondary {
+    right: -4%;
+    top: 34%;
+    width: clamp(180px, 30%, 520px);
+    height: clamp(140px, 44%, 520px);
+    transform: rotate(3deg);
+}
+
+/* Responsiveness */
+@media (max-width: 1024px) {
+    .decorated-section {
+        padding: 40px 20px;
+    }
+
+    .decorated-section .accent-rect {
+        box-shadow:
+            0 18px 54px rgba(0, 0, 0, 0.24),
+            0 0 160px 40px var(--glow, rgba(168, 28, 102, 0.35));
+    }
+}
+
+@media (max-width: 640px) {
+    .decorated-section {
+        padding: 32px 16px;
+    }
+
+    .decorated-section .accent-rect {
+        border-radius: 20px;
+    }
+
+    /* compress positions so content remains readable */
+    .decorated-section .left-primary {
+        left: -12%;
+        top: 2%;
+    }
+
+    .decorated-section .right-primary {
+        right: -12%;
+        top: 6%;
+    }
+}

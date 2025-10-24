@@ -136,10 +136,7 @@ const NavBar = () => {
 
   return (
     <>
-      <Header
-        className='headers card-border-gradient'
-        style={{ borderImage: 'linear-gradient(90deg, #1c1026, #c6bbb9, #4c1e3c, #21242b, #7a748c) 1', }}
-      >
+      <Header className='headers'>
         <Row justify="space-between" align="middle" style={{ height: '100%', padding: '0 12px' }}>
           <Col>
             <Button

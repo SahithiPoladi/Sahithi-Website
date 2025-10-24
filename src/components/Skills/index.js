@@ -11,8 +11,7 @@ const SkillTag = React.memo(({ skill }) => (
             border: "none",
             padding: "10px 20px",
             borderRadius: "30px",
-            background:
-                "linear-gradient(60deg, #073b41, #2a655e, #235c4b, #040b14, #445454)",
+            background: "linear-gradient(45deg, #a81c66, #b82152, #de3f52, #ee5b48)",
             boxShadow: "0 4px 15px rgba(0, 0, 0, 0.3)",
             width: "fit-content",
             textAlign: "center",

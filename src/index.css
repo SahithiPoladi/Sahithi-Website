@@ -57,7 +57,7 @@ code {
 p {
   /* Fluid, legible paragraph size across devices */
   font-size: clamp(16px, 1.6vw + 8px, 20px);
-  color: #d9dddc;
+  color: #000000;
 }
 
 /* Responsive headings */
@@ -65,31 +65,29 @@ p {
   font-size: clamp(28px, 3.5vw + 8px, 48px);
   margin: 0 0 24px;
   text-align: center;
+  color: #000000;
 }
 
 .hero-title {
   font-size: clamp(28px, 8vw, 84px);
   line-height: 1.05;
   margin: 0 0 12px;
+  color: #000000;
 }
 
 .hero-subtitle {
   font-size: clamp(18px, 4.2vw, 40px);
   margin: 0 0 24px;
+  color: #000000;
 }
 
 html,
 body,
 #root {
-  /* main gradient background for the app */
-  background: linear-gradient(-45deg,
-      #073b41,
-      #2a655e,
-      #235c4b,
-      #040b14,
-      #445454);
-  /* solid fallback color used during overscroll/bounce on some browsers (iOS/Chrome) */
-  background-color: #040b14;
+  /* Solid background for the entire app as requested */
+  background: #ff9657;
+  /* Explicit background color for overscroll/bounce on some browsers (iOS/Chrome) */
+  background-color: #ff9657;
   /* Avoid background-attachment: fixed on mobile to prevent scroll jank */
   background-attachment: scroll;
   /* Ensure gradient covers viewport and remains consistent on iOS */
@@ -123,18 +121,18 @@ body,
 .ant-layout-footer {
   /* Let the global gradient show through, keep text color consistent */
   background: transparent !important;
-  color: #d9dddc;
+  color: #000000;
 }
 
 .ant-menu,
 .ant-menu-item,
 .ant-menu-item a {
   background: transparent;
-  color: #d9dddc !important;
+  color: #000000 !important;
 }
 
 .ant-btn {
-  color: #d9dddc !important;
+  color: #000000 !important;
 }
 
 a {
@@ -157,6 +155,8 @@ a {
   }
 }
 
+/* Previously: decorative glowing rectangles on cards (removed per request) */
+
 .contact-icons {
   width: 55px;
   height: 55px;
@@ -164,7 +164,7 @@ a {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(45deg, #1c1026, #c6bbb9, #4c1e3c, #21242b, #7a748c);
+  background: linear-gradient(45deg, #a81c66, #b82152, #de3f52, #ee5b48);
   box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
   flex-shrink: 0;
 }
@@ -174,6 +174,22 @@ a {
     width: 44px;
     height: 44px;
   }
+}
+
+/* Project link button text color across states */
+.project-link-btn.ant-btn,
+.project-link-btn.ant-btn>span,
+.project-link-btn.ant-btn:visited,
+.project-link-btn.ant-btn:hover,
+.project-link-btn.ant-btn:active,
+.project-link-btn.ant-btn:focus {
+  color: #1b1b1b !important;
+}
+
+/* Keep its background and border consistent */
+.project-link-btn.ant-btn {
+  background: #ff9657 !important;
+  border: 3px solid #ff9657 !important;
 }
 
 /* Projects grid responsive layout */
@@ -208,10 +224,20 @@ a {
   }
 }
 
-/* Ensure header and footer surfaces remain readable over gradient */
+/* Header and footer match the solid background and use gradient borders */
 .ant-layout-header,
 .ant-layout-footer {
-  background: rgba(13, 9, 7, 0.6) !important;
-  -webkit-backdrop-filter: saturate(100%) blur(2px);
-  backdrop-filter: saturate(100%) blur(2px);
+  background: #ff9657 !important;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+/* Footer: gradient top border */
+.app-footer {
+  background: #ff9657 !important;
+  border: 0;
+  border-top-width: 2px;
+  border-style: solid;
+  border-image-slice: 1;
+  border-image-source: linear-gradient(-45deg, #a81c66, #b82152, #de3f52, #ee5b48);
 }

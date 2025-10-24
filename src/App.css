@@ -1,5 +1,8 @@
 .App {
   text-align: center;
+  position: relative;
+  z-index: 1;
+  /* ensure app content sits above background overlays */
 }
 
 .App-logo {
