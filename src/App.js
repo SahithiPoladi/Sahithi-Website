@@ -9,7 +9,6 @@ const About = lazy(() => import('./components/About'));
 const Work = lazy(() => import('./components/Work'));
 const Skills = lazy(() => import('./components/Skills'));
 const Projects = lazy(() => import(/* webpackPrefetch: true */ './components/Projects'));
-const StarsBackground = lazy(() => import('./common/StarsBackground'));
 
 // Landing page sections (original single-page layout)
 function LandingPage() {
@@ -40,9 +39,6 @@ function LandingPage() {
 function App() {
   return (
     <div className="App">
-      <Suspense fallback={null}>
-        <StarsBackground />
-      </Suspense>
       <BrowserRouter>
         <NavBar />
         <Routes>
@@ -53,7 +49,7 @@ function App() {
             </Suspense>
           } />
         </Routes>
-        <Layout.Footer style={{ textAlign: 'center', borderTop: '1px solid #3e424b' }}>
+        <Layout.Footer className="app-footer" style={{ textAlign: 'center' }}>
           ©2025 Sahithi. All rights reserved.
         </Layout.Footer>
       </BrowserRouter>

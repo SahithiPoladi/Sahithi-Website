@@ -18,9 +18,9 @@ const WorkItem = React.memo(({ exp }) => {
                 >
                     {/* Left side: title, company, duration */}
                     <div className="unna-regular work-left" style={{ width: "45%", textAlign: "right", paddingRight: "40px" }}>
-                        <h2 style={{ marginBottom: '5px' }}>{exp.title}</h2>
-                        <h3 style={{ marginBottom: '5px' }}>{exp.company}</h3>
-                        <p style={{ marginBottom: '5px' }}><strong>Duration:</strong> {exp.duration}</p>
+                        <h2 style={{ marginBottom: '5px', color: '#000000' }}>{exp.title}</h2>
+                        <h3 style={{ marginBottom: '5px', color: '#000000' }}>{exp.company}</h3>
+                        <p style={{ marginBottom: '5px', color: '#000000' }}><strong>Duration:</strong> {exp.duration}</p>
                     </div>
                     {/* Timeline dot */}
                     <div
@@ -38,8 +38,8 @@ const WorkItem = React.memo(({ exp }) => {
                                 display: "block",
                                 width: "18px",
                                 height: "18px",
-                                background: "#cccccc",
-                                border: "4px solid #222",
+                                background: "#ff9657",
+                                border: "4px solid #de3f52",
                                 borderRadius: "50%",
                                 position: "relative",
                                 zIndex: 3,
@@ -83,7 +83,7 @@ const Work = () => {
                         top: 0,
                         bottom: 0,
                         width: "4px",
-                        background: "linear-gradient(180deg, #1c1026, #c6bbb9, #4c1e3c, #21242b, #7a748c)",
+                        background: "linear-gradient(45deg, #a81c66, #b82152, #de3f52, #ee5b48)",
                         transform: "translateX(-50%)",
                         zIndex: 0
                     }}

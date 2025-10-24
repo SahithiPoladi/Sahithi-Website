@@ -43,7 +43,6 @@ const Projects = () => {
         if (!imageVal) return undefined;
         if (/^https?:\/\//i.test(imageVal)) return imageVal; // already a URL
         const key = normalize(imageVal);
-        if (imageIndex[key]) return imageIndex[key];
         // Try removing common suffixes
         const trimmed = key.replace(/(project|app|site)$/i, '');
         if (imageIndex[trimmed]) return imageIndex[trimmed];
@@ -76,7 +75,7 @@ const Projects = () => {
                             style={{
                                 padding: 24,
                                 position: 'relative',
-                                color: '#d9dddc',
+                                color: '#000000',
                                 display: 'flex',
                                 flexDirection: 'column',
                                 alignItems: 'stretch'
@@ -99,11 +98,11 @@ const Projects = () => {
                             )}
                         >
 
-                            <h2 style={{ marginTop: 0, marginBottom: 12, color: '#d9dddc' }}>{p.name}</h2>
-                            <p style={{ marginTop: 0, marginBottom: 16, color: '#d9dddc', lineHeight: 1.5 }}>{p.description}</p>
+                            <h2 style={{ marginTop: 0, marginBottom: 12, color: '#000000' }}>{p.name}</h2>
+                            <p style={{ marginTop: 0, marginBottom: 16, color: '#000000', lineHeight: 1.5 }}>{p.description}</p>
                             {
                                 Array.isArray(p.tech) && p.tech.length > 0 && (
-                                    <p style={{ fontSize: 16, opacity: .9, marginBottom: 16, color: '#d9dddc' }}><strong>Tech:</strong> {p.tech.join(', ')}</p>
+                                    <p style={{ fontSize: 16, opacity: .9, marginBottom: 16, color: '#000000' }}><strong>Tech:</strong> {p.tech.join(', ')}</p>
                                 )
                             }
                             {p.link && (
@@ -112,14 +111,14 @@ const Projects = () => {
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     style={{
-                                        background: '#073b41',
+                                        background: '#b82152',
                                         color: '#d9dddc',
-                                        border: '1px solid rgba(255,255,255,0.15)',
+                                        border: '3px solid #b82152',
                                         fontSize: 14,
                                         padding: '6px 14px',
                                         alignSelf: 'flex-start'
                                     }}
-                                    className="unna-bold"
+                                    className="unna-bold project-link-btn"
                                 >
                                     Project Code
                                 </Button>
@@ -128,7 +127,7 @@ const Projects = () => {
                     );
                 })}
             </div>
-        </main >
+        </main>
     );
 }
 
