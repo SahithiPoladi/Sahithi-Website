@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Layout, Menu, Button, Row, Col, Drawer } from 'antd';
 import { useNavigate, useLocation } from 'react-router-dom';
 import spLogo from '../../common/images/sp.png';
 import { DownloadOutlined, MenuOutlined, CloseOutlined } from '@ant-design/icons';
 import './index.css';
+import { loadAbout, loadWork, loadSkills, loadProjects, prefetchProjectImages } from '../../lazyImports';
 const resumePath = '/Sahithi_Poladi.pdf';
 
 const { Header } = Layout;
@@ -58,6 +59,14 @@ const NavBar = () => {
       value: 'Projects',
     }
   ];
+
+  // Map menu keys to prefetchers for instant navigation after hover/focus
+  const prefetchMap = useMemo(() => ({
+    about: () => loadAbout(),
+    work: () => loadWork(),
+    skills: () => loadSkills(),
+    projects: () => { loadProjects(); prefetchProjectImages(6); },
+  }), []);
 
   const onItemSelect = (e) => {
     const key = e.key;
@@ -160,7 +169,11 @@ const NavBar = () => {
               }}
             >
               {items.map(item => (
-                <Menu.Item key={item.key}>
+                <Menu.Item
+                  key={item.key}
+                  onMouseEnter={() => prefetchMap[item.key]?.()}
+                  onFocus={() => prefetchMap[item.key]?.()}
+                >
                   {item.value}
                 </Menu.Item>
               ))}
@@ -192,9 +205,9 @@ const NavBar = () => {
         placement="right"
         onClose={() => setMobileOpen(false)}
         open={mobileOpen}
-        bodyStyle={{ padding: 0, background: '#0d0907' }}
-        headerStyle={{ background: '#0d0907', borderBottom: '1px solid #333' }}
-        styles={{ mask: { backdropFilter: 'none' } }}
+        bodyStyle={{ padding: 0, background: '#ff9657' }}
+        headerStyle={{ background: '#ff9657', borderBottom: '1px solid rgba(0,0,0,0.1)' }}
+        styles={{ mask: { backdropFilter: 'none' }, content: { background: '#ff9657' } }}
       >
         <Menu
           mode="inline"
@@ -203,7 +216,11 @@ const NavBar = () => {
           style={{ borderRight: 'none', background: 'transparent' }}
         >
           {items.map(item => (
-            <Menu.Item key={item.key}>
+            <Menu.Item
+              key={item.key}
+              onMouseEnter={() => prefetchMap[item.key]?.()}
+              onFocus={() => prefetchMap[item.key]?.()}
+            >
               {item.value}
             </Menu.Item>
           ))}

@@ -1,14 +1,11 @@
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Layout } from 'antd';
 import './App.css';
 import NavBar from './components/NavBar';
 import Home from './components/Home';
-// Lazy-load non-critical sections and routes to shrink initial JS
-const About = lazy(() => import('./components/About'));
-const Work = lazy(() => import('./components/Work'));
-const Skills = lazy(() => import('./components/Skills'));
-const Projects = lazy(() => import(/* webpackPrefetch: true */ './components/Projects'));
+// Centralized lazy imports and prefetch helpers
+import { About, Work, Skills, Projects, prefetchAll } from './lazyImports';
 
 // Landing page sections (original single-page layout)
 function LandingPage() {
@@ -37,6 +34,10 @@ function LandingPage() {
 }
 
 function App() {
+  // Warm up code-split chunks on idle so section switches feel instant
+  useEffect(() => {
+    prefetchAll();
+  }, []);
   return (
     <div className="App">
       <BrowserRouter>

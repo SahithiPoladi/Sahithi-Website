@@ -1,3 +1,14 @@
+import blog from './common/images/blog.png';
+import cracs from './common/images/cracs.png';
+import farmer from './common/images/farmer.png';
+import port from './common/images/port.png';
+import ruby from './common/images/ruby.png';
+import star from './common/images/star.png';
+import unh from './common/images/unh.png';
+import sales from './common/images/sales.png';
+import crimes from './common/images/crimes.png';
+import pt from './common/images/pt.png';
+
 export const aboutMe = [
     {
         "_id": "1",
@@ -83,7 +94,7 @@ export const projects = [
             "cufflinks"
         ],
         "link": "https://github.com/SahithiPoladi/Crimes-in-chicago---2001-to-Present",
-        "logo": "crimes"
+        "logo": crimes
     },
     {
         "_id": "2",
@@ -98,7 +109,7 @@ export const projects = [
             "cufflinks"
         ],
         "link": "https://github.com/SahithiPoladi/Black_Friday_Sales_Prediction",
-        "logo": "sales"
+        "logo": sales
     },
     {
         "_id": "3",
@@ -110,7 +121,7 @@ export const projects = [
             "JavaScript"
         ],
         "link": "https://github.com/SahithiPoladi/Periodic-Table",
-        "logo": "pt"
+        "logo": pt
     },
     {
         "_id": "4",
@@ -125,7 +136,7 @@ export const projects = [
             "Bootstrap"
         ],
         "link": "https://github.com/SahithiPoladi/Portfolio_app",
-        "logo": "port"
+        "logo": port
     },
     {
         "_id": "5",
@@ -141,7 +152,7 @@ export const projects = [
             "JavaScript"
         ],
         "link": "https://github.com/SahithiPoladi/SocialApp",
-        "logo": "star"
+        "logo": star
     },
     {
         "_id": "6",
@@ -155,7 +166,7 @@ export const projects = [
             "CSS"
         ],
         "link": "https://github.com/SahithiPoladi/UNH-FEST",
-        "logo": "unh"
+        "logo": unh
     },
     {
         "_id": "7",
@@ -170,7 +181,7 @@ export const projects = [
             "Bootstrap"
         ],
         "link": "https://github.com/SahithiPoladi/Blog-Project",
-        "logo": "blog"
+        "logo": blog
     },
     {
         "_id": "8",
@@ -184,7 +195,7 @@ export const projects = [
             "000webhost"
         ],
         "link": "https://github.com/SahithiPoladi/eCultivation",
-        "logo": "farmer"
+        "logo": farmer
     },
     {
         "_id": "9",
@@ -196,7 +207,7 @@ export const projects = [
             "jQuery"
         ],
         "link": "https://github.com/SahithiPoladi/CRACS",
-        "logo": "cracs"
+        "logo": cracs
     },
     {
         "_id": "10",
@@ -210,7 +221,7 @@ export const projects = [
             "JavaScript"
         ],
         "link": "https://github.com/SahithiPoladi/RUBYZEST-16",
-        "logo": "ruby"
+        "logo": ruby
     }
 ];
 
