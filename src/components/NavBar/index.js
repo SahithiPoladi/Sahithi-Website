@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import spLogo from '../../common/images/sp.png';
 import { DownloadOutlined, MenuOutlined, CloseOutlined } from '@ant-design/icons';
 import './index.css';
-import { loadAbout, loadWork, loadSkills, loadProjects, prefetchProjectImages } from '../../lazyImports';
+import { loadAbout, loadWork, loadSkills, loadProjects, prefetchProjectImages } from '../../lazyImports.js';
 const resumePath = '/Sahithi_Poladi.pdf';
 
 const { Header } = Layout;

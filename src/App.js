@@ -5,7 +5,7 @@ import './App.css';
 import NavBar from './components/NavBar';
 import Home from './components/Home';
 // Centralized lazy imports and prefetch helpers
-import { About, Work, Skills, Projects, prefetchAll } from './lazyImports';
+import { About, Work, Skills, Projects, prefetchAll } from './lazyImports.js';
 
 // Landing page sections (original single-page layout)
 function LandingPage() {
